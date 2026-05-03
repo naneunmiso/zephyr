@@ -41,19 +41,22 @@ heroTl.fromTo('.hero-section .reveal-text',
 const revealElements = document.querySelectorAll('.content-section .reveal-text, .content-section .reveal-item, .wishes-section .reveal-text, .wishes-section .reveal-item');
 
 revealElements.forEach((el) => {
-    gsap.to(el, {
-        scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            end: "bottom 20%",
-            toggleActions: "play none none reverse",
-            // markers: true, // Uncomment for debugging
-        },
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        ease: "power3.out"
-    });
+    gsap.fromTo(el, 
+        { y: 50, opacity: 0, visibility: 'hidden' },
+        {
+            scrollTrigger: {
+                trigger: el,
+                start: "top 85%",
+                end: "bottom 20%",
+                toggleActions: "play none none reverse",
+            },
+            y: 0,
+            opacity: 1,
+            visibility: 'visible',
+            duration: 0.8,
+            ease: "power3.out"
+        }
+    );
 });
 
 // Parallax Gallery
