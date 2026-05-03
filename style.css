@@ -802,34 +802,233 @@ section {
 }
 
 /* ═══════════════════════════════════════════
-   FOOTER — Cinematic
+   HERO ENHANCEMENTS
 ═══════════════════════════════════════════ */
-.footer {
-    padding: 5rem 2rem;
+.hero-eyebrow {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    letter-spacing: 5px;
+    color: rgba(232, 139, 155, 0.7);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+.hero-personal {
+    margin-top: 1.5rem;
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    color: rgba(240, 230, 228, 0.55);
+    font-style: normal;
+    letter-spacing: 0.5px;
+}
+
+/* ═══════════════════════════════════════════
+   FOR HER — Personal Reasons Section
+═══════════════════════════════════════════ */
+.for-her-section {
+    background: linear-gradient(160deg, #080310 0%, #0f0720 50%, #160824 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.for-her-bg-glow {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 10% 20%, rgba(232,139,155,0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 80%, rgba(124,58,237,0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(201,169,110,0.04) 0%, transparent 60%);
+    pointer-events: none;
+    animation: forHerGlow 6s ease-in-out infinite alternate;
+}
+
+@keyframes forHerGlow {
+    0% { opacity: 0.7; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.05); }
+}
+
+.reasons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 5rem;
+}
+
+.reason-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(232,139,155,0.12);
+    border-radius: 20px;
+    padding: 2.2rem;
+    transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    will-change: transform;
+}
+
+.reason-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(232,139,155,0.05) 0%, transparent 60%);
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.reason-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(232,139,155,0.08);
+    border-color: rgba(232,139,155,0.3);
+}
+
+.reason-card:hover::before { opacity: 1; }
+
+.reason-icon {
+    font-size: 2.2rem;
+    margin-bottom: 1.2rem;
+    display: block;
+    filter: drop-shadow(0 0 12px rgba(232,139,155,0.4));
+}
+
+.reason-card h3 {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--accent-color);
+    margin-bottom: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.reason-card p {
+    font-size: 0.9rem;
+    color: rgba(240,230,228,0.6);
+    line-height: 1.75;
+    letter-spacing: 0.3px;
+}
+
+/* Personal Love Note */
+.utkarsh-note {
+    max-width: 700px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(232,139,155,0.2);
+    border-radius: 24px;
+    padding: 3rem 3.5rem;
     text-align: center;
-    background: #080507;
-    border-top: 1px solid rgba(232, 139, 155, 0.1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.note-glow {
+    position: absolute;
+    top: -60px; left: 50%; transform: translateX(-50%);
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(232,139,155,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    animation: noteGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes noteGlow {
+    0% { opacity: 0.5; transform: translateX(-50%) scale(0.9); }
+    100% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+}
+
+.note-from {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 5px;
+    color: rgba(232,139,155,0.5);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
     position: relative;
 }
 
+.note-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+    color: rgba(240,230,228,0.85);
+    line-height: 1.9;
+    position: relative;
+}
+
+.note-signature {
+    margin-top: 2rem;
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--accent-color);
+    position: relative;
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER — Emotional
+═══════════════════════════════════════════ */
+.footer {
+    padding: 6rem 2rem;
+    text-align: center;
+    background: #060407;
+    border-top: 1px solid rgba(232, 139, 155, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
 .footer::before {
-    content: '桜';
+    content: '♡';
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 20rem;
-    color: rgba(232, 139, 155, 0.03);
+    font-size: 22rem;
+    color: rgba(232, 139, 155, 0.025);
     font-family: var(--font-heading);
     pointer-events: none;
 }
 
-.footer p {
-    font-size: 0.75rem;
-    letter-spacing: 4px;
-    color: rgba(232, 139, 155, 0.4);
+.footer-heart {
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-bottom: 1.5rem;
+    animation: heartbeat 1.8s ease-in-out infinite;
+    display: inline-block;
+    filter: drop-shadow(0 0 12px rgba(232,139,155,0.6));
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    14% { transform: scale(1.2); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.15); }
+    70% { transform: scale(1); }
+}
+
+.footer-main {
+    font-size: 0.7rem;
+    letter-spacing: 6px;
+    color: rgba(232, 139, 155, 0.5);
+    margin-bottom: 1rem;
     position: relative;
 }
+
+.footer-sub {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.1rem;
+    color: rgba(240,230,228,0.35);
+    max-width: 500px;
+    margin: 0 auto 1rem;
+    line-height: 1.6;
+    position: relative;
+}
+
+.footer-sig {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: rgba(201,169,110,0.45);
+    letter-spacing: 2px;
+    position: relative;
+}
+
+
 
 /* ═══════════════════════════════════════════
    REVEAL ANIMATIONS
