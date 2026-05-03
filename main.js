@@ -396,6 +396,32 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             loop: false,
         });
+
+        // Restore BTS Swiper
+        new Swiper('.bts-swiper', {
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            loop: true,
+            speed: 800,
+            parallax: true,
+            coverflowEffect: {
+                rotate: 5,
+                stretch: 0,
+                depth: 100,
+                modifier: 1.5,
+                slideShadows: false,
+            },
+            pagination: {
+                el: '.bts-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.bts-nav-next',
+                prevEl: '.bts-nav-prev',
+            }
+        });
     }
 
     // Falling Sakura Petals Effect
@@ -450,68 +476,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 4000); // Change every 4 seconds
     }
 
-    // Guestbook Logic
-    const guestbookForm = document.getElementById('guestbook-form');
-    const wishesGrid = document.getElementById('wishes-grid');
+    // ═══ THE MAGIC SHOP LOGIC ═══
+    const orbs = document.querySelectorAll('.magic-orb');
+    const messageContainer = document.getElementById('magic-message');
 
-    if (guestbookForm && wishesGrid) {
-        // Load existing wishes from localStorage
-        function loadWishes() {
-            const storedWishes = JSON.parse(localStorage.getItem('muskan_wishes') || '[]');
-            
-            // Default wishes if empty
-            if (storedWishes.length === 0) {
-                const defaults = [
-                    { name: "Alex", message: "May your year be as bold, beautiful, and vibrant as you are!" },
-                    { name: "Sarah", message: "Keep shining your light on the world, Muskan." }
-                ];
-                localStorage.setItem('muskan_wishes', JSON.stringify(defaults));
-                storedWishes.push(...defaults);
-            }
-
-            wishesGrid.innerHTML = '';
-            storedWishes.forEach(wish => {
-                addWishToDOM(wish.name, wish.message);
+    if (orbs.length > 0 && messageContainer) {
+        orbs.forEach(orb => {
+            orb.addEventListener('click', () => {
+                orbs.forEach(o => o.classList.remove('active'));
+                orb.classList.add('active');
+                const message = orb.getAttribute('data-wish');
+                
+                messageContainer.style.opacity = '0';
+                messageContainer.style.transform = 'translateY(10px)';
+                
+                setTimeout(() => {
+                    messageContainer.innerHTML = `<p>${message}</p>`;
+                    messageContainer.style.opacity = '1';
+                    messageContainer.style.transform = 'translateY(0)';
+                }, 400);
             });
-        }
-
-        function addWishToDOM(name, message) {
-            const wishCard = document.createElement('div');
-            wishCard.classList.add('wish-card', 'reveal-item', 'active'); 
-            wishCard.innerHTML = `
-                <p>"${message}"</p>
-                <span>— ${name}</span>
-            `;
-            // Insert at beginning
-            wishesGrid.insertBefore(wishCard, wishesGrid.firstChild);
-        }
-
-        guestbookForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const nameInput = document.getElementById('wish-name');
-            const messageInput = document.getElementById('wish-message');
-            
-            if (nameInput.value.trim() && messageInput.value.trim()) {
-                const newWish = {
-                    name: nameInput.value.trim(),
-                    message: messageInput.value.trim()
-                };
-                
-                // Save to localStorage
-                const storedWishes = JSON.parse(localStorage.getItem('muskan_wishes') || '[]');
-                storedWishes.unshift(newWish); // add to top
-                localStorage.setItem('muskan_wishes', JSON.stringify(storedWishes));
-                
-                // Update UI
-                addWishToDOM(newWish.name, newWish.message);
-                
-                // Reset form
-                guestbookForm.reset();
-            }
         });
-
-        loadWishes();
     }
 });
 
