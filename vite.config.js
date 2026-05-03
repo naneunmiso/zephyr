@@ -6,7 +6,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        dashboard: resolve(__dirname, 'dashboard/index.html'),
         letters: resolve(__dirname, 'pages/letters.html'),
         memories: resolve(__dirname, 'pages/memories.html'),
         favchapter: resolve(__dirname, 'pages/fav-chapter.html'),
