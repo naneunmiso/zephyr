@@ -27,19 +27,15 @@ lenis.on('scroll', ScrollTrigger.update);
 // Hero Animations
 const heroTl = gsap.timeline();
 
-heroTl.to('.reveal-text', {
-    y: 0,
-    opacity: 1,
-    duration: 1.5,
-    stagger: 0.2,
-    ease: "power4.out"
-})
-.to('.reveal-item', {
-    y: 0,
-    opacity: 1,
-    duration: 1,
-    ease: "power3.out"
-}, "-=1");
+heroTl.fromTo('.hero-section .reveal-text', 
+    { y: 100, opacity: 0, visibility: 'hidden' },
+    { y: 0, opacity: 1, visibility: 'visible', duration: 1, stagger: 0.1, ease: "power4.out" }
+)
+.fromTo('.hero-section .reveal-item', 
+    { y: 50, opacity: 0, visibility: 'hidden' },
+    { y: 0, opacity: 1, visibility: 'visible', duration: 0.8, ease: "power3.out" }, 
+    "-=0.5"
+);
 
 // Scroll Reveal Animations
 const revealElements = document.querySelectorAll('.content-section .reveal-text, .content-section .reveal-item, .wishes-section .reveal-text, .wishes-section .reveal-item');
@@ -92,9 +88,9 @@ gsap.to(".navbar", {
         start: "100px top",
         toggleActions: "play none none reverse"
     },
-    backgroundColor: "rgba(253, 246, 245, 0.8)",
-    backdropFilter: "blur(10px)",
-    padding: "1rem 2rem",
+    backgroundColor: "rgba(6, 3, 5, 0.95)",
+    backdropFilter: "blur(20px)",
+    padding: "0.8rem 1.5rem",
     duration: 0.3
 });
 
@@ -205,7 +201,7 @@ const heroBgBlur1 = document.getElementById('hero-slider-blur-1');
 const prevBtn = document.querySelector('.prev-btn');
 const nextBtn = document.querySelector('.next-btn');
 
-if (heroBg0 && heroBg1 && prevBtn && nextBtn) {
+if (heroBg0 && heroBg1) {
     const sliderImages = [
         'herosection.webp',
         'memories/Screenshot 2026-05-02 at 10.13.57 PM.webp',
@@ -335,15 +331,7 @@ if (heroBg0 && heroBg1 && prevBtn && nextBtn) {
         startAutoSlide();
     }
     
-    nextBtn.addEventListener('click', () => {
-        nextSlide();
-        resetAutoSlide();
-    });
-    
-    prevBtn.addEventListener('click', () => {
-        prevSlide();
-        resetAutoSlide();
-    });
+
     
     // Preload next images lazily
     function preloadImages() {
@@ -518,15 +506,4 @@ navLinks.forEach(link => {
     });
 });
 
-// Scroll Indicator Fade Out
-gsap.to('.scroll-indicator', {
-    scrollTrigger: {
-        trigger: '#hero',
-        start: 'top top',
-        end: '200px top',
-        scrub: true
-    },
-    opacity: 0,
-    y: 50,
-    pointerEvents: 'none'
-});
+
