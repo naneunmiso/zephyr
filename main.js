@@ -276,6 +276,7 @@ if (heroBg0 && heroBg1) {
     
     // Init first slide
     heroBg0.style.backgroundImage = `url('${sliderImages[0]}')`;
+    heroBg0.classList.add('active-slide');
     if (heroBgBlur0) heroBgBlur0.style.backgroundImage = `url('${sliderImages[0]}')`;
     
     function changeSlide(index) {
@@ -294,30 +295,43 @@ if (heroBg0 && heroBg1) {
         const oldSharp = activeLayer === 0 ? heroBg0 : heroBg1;
         const oldBlur = activeLayer === 0 ? heroBgBlur0 : heroBgBlur1;
         
-        // Ensure new layer is structurally on top of the old layer
-        nextSharp.style.zIndex = "2";
-        if (nextBlur) nextBlur.style.zIndex = "1";
-        
-        oldSharp.style.zIndex = "1";
-        if (oldBlur) oldBlur.style.zIndex = "0";
-        
         // Load new image
         nextSharp.style.backgroundImage = `url('${sliderImages[currentSlide]}')`;
         if (nextBlur) nextBlur.style.backgroundImage = `url('${sliderImages[currentSlide]}')`;
         
-        // Start new layer at opacity 0
+        // Reset classes
+        oldSharp.classList.remove('active-slide');
+        nextSharp.classList.add('active-slide');
+        nextSharp.classList.add('animating');
+
+        // Ensure new layer is structurally on top of the old layer
+        nextSharp.style.zIndex = "2";
+        if (nextBlur) nextBlur.style.zIndex = "1";
+        oldSharp.style.zIndex = "1";
+        if (oldBlur) oldBlur.style.zIndex = "0";
+        
+        // Start new layer hidden
         gsap.set([nextBlur, nextSharp], { opacity: 0 });
         
-        // Fade IN new layer. Old layer stays at opacity 1 behind it!
-        gsap.to([nextBlur, nextSharp], { 
-            opacity: 1, 
-            duration: 1.2, 
-            ease: "power2.inOut",
+        // Lens Iris Animation + Fade IN
+        const tl = gsap.timeline({
             onComplete: () => {
                 gsap.set([oldBlur, oldSharp], { opacity: 0 });
+                nextSharp.classList.remove('animating');
                 isAnimating = false;
             }
         });
+
+        tl.to([nextBlur, nextSharp], { 
+            opacity: 1, 
+            duration: 0.8, 
+            ease: "power2.in"
+        })
+        .fromTo(nextSharp, 
+            { clipPath: "circle(0% at 50% 50%)" },
+            { clipPath: "circle(100% at 50% 50%)", duration: 1.5, ease: "power4.inOut" },
+            0
+        );
         
         activeLayer = nextLayer;
     }
