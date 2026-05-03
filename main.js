@@ -24,18 +24,19 @@ gsap.registerPlugin(ScrollTrigger);
 // Connect Lenis to ScrollTrigger
 lenis.on('scroll', ScrollTrigger.update);
 
-// Hero Animations
-const heroTl = gsap.timeline();
+// Hero Animations — premium staggered entrance
+const heroTl = gsap.timeline({ delay: 0.1 });
 
-heroTl.fromTo('.hero-section .reveal-text', 
-    { y: 100, opacity: 0, visibility: 'hidden' },
-    { y: 0, opacity: 1, visibility: 'visible', duration: 1, stagger: 0.1, ease: "power4.out" }
-)
-.fromTo('.hero-section .reveal-item', 
-    { y: 50, opacity: 0, visibility: 'hidden' },
-    { y: 0, opacity: 1, visibility: 'visible', duration: 0.8, ease: "power3.out" }, 
-    "-=0.5"
-);
+heroTl
+    .fromTo('.hero-section .reveal-text', 
+        { y: 60, opacity: 0, visibility: 'hidden' },
+        { y: 0, opacity: 1, visibility: 'visible', duration: 1.1, stagger: 0.12, ease: "power4.out" }
+    )
+    .fromTo('.hero-section .reveal-item', 
+        { y: 30, opacity: 0, visibility: 'hidden' },
+        { y: 0, opacity: 1, visibility: 'visible', duration: 0.9, ease: "power3.out" }, 
+        "-=0.6"
+    );
 
 // Optimized Scroll Reveal Animations
 const sections = document.querySelectorAll('.content-section, .wishes-section');
@@ -43,25 +44,38 @@ const sections = document.querySelectorAll('.content-section, .wishes-section');
 sections.forEach((section) => {
     const revealText = section.querySelectorAll('.reveal-text');
     const revealItems = section.querySelectorAll('.reveal-item');
-    
-    gsap.fromTo([...revealText, ...revealItems], 
-        { y: 30, opacity: 0, visibility: 'hidden' },
+    const h2 = section.querySelector('.section-header h2');
+
+    // Animate the decorative underline in
+    if (h2) {
+        ScrollTrigger.create({
+            trigger: section,
+            start: "top 80%",
+            onEnter: () => h2.classList.add('line-revealed'),
+            onLeaveBack: () => h2.classList.remove('line-revealed')
+        });
+    }
+
+    gsap.fromTo([...revealText, ...revealItems],
+        { y: 40, opacity: 0, visibility: 'hidden' },
         {
             scrollTrigger: {
                 trigger: section,
-                start: "top 85%",
+                start: "top 82%",
                 toggleActions: "play none none reverse",
             },
             y: 0,
             opacity: 1,
             visibility: 'visible',
-            duration: 0.8,
-            stagger: 0.05,
-            ease: "power2.out",
-            overwrite: true
+            duration: 0.9,
+            stagger: 0.06,
+            ease: "power3.out",
+            overwrite: true,
+            clearProps: "transform"
         }
     );
 });
+
 
 // Parallax Gallery
 gsap.to(".parallax-img", {
