@@ -37,24 +37,28 @@ heroTl.fromTo('.hero-section .reveal-text',
     "-=0.5"
 );
 
-// Scroll Reveal Animations
-const revealElements = document.querySelectorAll('.content-section .reveal-text, .content-section .reveal-item, .wishes-section .reveal-text, .wishes-section .reveal-item');
+// Optimized Scroll Reveal Animations
+const sections = document.querySelectorAll('.content-section, .wishes-section');
 
-revealElements.forEach((el) => {
-    gsap.fromTo(el, 
-        { y: 50, opacity: 0, visibility: 'hidden' },
+sections.forEach((section) => {
+    const revealText = section.querySelectorAll('.reveal-text');
+    const revealItems = section.querySelectorAll('.reveal-item');
+    
+    gsap.fromTo([...revealText, ...revealItems], 
+        { y: 30, opacity: 0, visibility: 'hidden' },
         {
             scrollTrigger: {
-                trigger: el,
+                trigger: section,
                 start: "top 85%",
-                end: "bottom 20%",
                 toggleActions: "play none none reverse",
             },
             y: 0,
             opacity: 1,
             visibility: 'visible',
             duration: 0.8,
-            ease: "power3.out"
+            stagger: 0.05,
+            ease: "power2.out",
+            overwrite: true
         }
     );
 });
@@ -340,7 +344,7 @@ if (heroBg0 && heroBg1) {
     function prevSlide() { changeSlide(currentSlide - 1); }
     
     function startAutoSlide() {
-        slideInterval = setInterval(nextSlide, 3000); // 3 second interval
+        slideInterval = setInterval(nextSlide, 5000); // 3 second interval
     }
     
     function resetAutoSlide() {
@@ -352,7 +356,7 @@ if (heroBg0 && heroBg1) {
     
     // Preload next images lazily
     function preloadImages() {
-        for(let i=1; i<5; i++) {
+        for(let i=1; i<3; i++) {
             if(sliderImages[i]) {
                 const img = new Image();
                 img.src = sliderImages[i];

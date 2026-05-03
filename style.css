@@ -254,7 +254,7 @@ section {
     position: absolute;
     top: 50%; left: 50%;
     width: 100%; height: 100%;
-    transform: translate(-50%, -50%) scale(1.1);
+    transform: translate(-50%, -50%);
     background-image: url('/herosection.webp');
     background-size: cover;
     background-position: center;
@@ -262,6 +262,7 @@ section {
     z-index: 1;
     clip-path: circle(100% at 50% 50%);
     transition: clip-path 1.5s cubic-bezier(0.7, 0, 0.3, 1);
+    will-change: transform, opacity, clip-path;
 }
 
 /* Enhanced Lens Effect */
@@ -280,8 +281,8 @@ section {
 }
 
 @keyframes slowZoom {
-    0% { transform: translate(-50%, -50%) scale(1.1); }
-    100% { transform: translate(-50%, -50%) scale(1.2); }
+    0% { transform: translate(-50%, -50%) scale(1.0); }
+    100% { transform: translate(-50%, -50%) scale(1.1); }
 }
 
 .hero-bg.active-slide {
@@ -893,6 +894,20 @@ section {
 
     .section-header::before {
         font-size: 0.8rem;
+    }
+
+    .navbar-wrapper { padding: 1rem; }
+    .navbar { width: 100%; }
+    
+    /* Optimization: Reduce blur intensity on mobile to fix lag */
+    .hero-bg-blur { filter: blur(15px) brightness(0.4); }
+    .navbar { backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); }
+    
+    /* Fix mobile cropping: Use contain for hero background on mobile if aspect ratio is off */
+    .hero-bg {
+        background-size: cover;
+        width: 100%;
+        height: 100%;
     }
 
     .hero-content h1 {
