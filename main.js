@@ -287,15 +287,12 @@ if (heroBg0 && heroBg1) {
         '/memories/Screenshot 2026-05-02 at 10.23.23 PM.webp'
     ];
     
+    const desktopImage = 'memories/Screenshot 2026-05-02 at 10.22.39 PM.webp';
+    
     let currentSlide = 0;
     let activeLayer = 0; // 0 or 1
     let slideInterval;
     let isAnimating = false;
-    
-    // Init first slide
-    heroBg0.style.backgroundImage = `url('${sliderImages[0]}')`;
-    heroBg0.classList.add('active-slide');
-    if (heroBgBlur0) heroBgBlur0.style.backgroundImage = `url('${sliderImages[0]}')`;
     
     function changeSlide(index) {
         if (isAnimating) return;
@@ -358,16 +355,98 @@ if (heroBg0 && heroBg1) {
     function prevSlide() { changeSlide(currentSlide - 1); }
     
     function startAutoSlide() {
-        slideInterval = setInterval(nextSlide, 5000); // 3 second interval
+        if (slideInterval) clearInterval(slideInterval);
+        slideInterval = setInterval(nextSlide, 5000); 
     }
     
-    function resetAutoSlide() {
+    function stopAutoSlide() {
         clearInterval(slideInterval);
-        startAutoSlide();
     }
     
+    // Responsive handling for Hero Background
+    mm.add({
+        isDesktop: "(min-width: 800px)",
+        isMobile: "(max-width: 799px)"
+    }, (context) => {
+        let { isDesktop, isMobile } = context.conditions;
 
-    
+        if (isDesktop) {
+            stopAutoSlide();
+            // Force Desktop Image
+            heroBg0.style.backgroundImage = `url('${desktopImage}')`;
+            
+            // Force absolute coverage and sharpness
+            gsap.set(heroBg0, { 
+                opacity: 1, 
+                zIndex: 10, 
+                clipPath: "none", 
+                filter: "none",
+                width: "100%",
+                height: "100%",
+                left: "50%",
+                top: "50%",
+                xPercent: -50,
+                yPercent: -50,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundAttachment: "fixed" // Added for premium feel on desktop
+            });
+            
+            if (heroBgBlur0) {
+                gsap.set(heroBgBlur0, { 
+                    opacity: 0, 
+                    zIndex: 1,
+                    visibility: "hidden"
+                });
+            }
+
+            // Hide the dark vignette overlay on desktop for maximum image clarity
+            const heroOverlay = document.querySelector('.hero-overlay');
+            if (heroOverlay) heroOverlay.style.display = 'none';
+
+            // Hide slider buttons if they exist
+            const sliderBtns = document.querySelectorAll('.hero-slider-btn, .prev-btn, .next-btn');
+            sliderBtns.forEach(btn => btn.style.display = 'none');
+            
+            // Hide second layer entirely
+            gsap.set([heroBg1, heroBgBlur1], { opacity: 0, zIndex: 1, visibility: "hidden" });
+            
+            // Remove zoom animation
+            heroBg0.classList.remove('active-slide');
+        } else {
+            // Mobile: Slideshow
+            // Show overlay and buttons again if they were hidden
+            const heroOverlay = document.querySelector('.hero-overlay');
+            if (heroOverlay) heroOverlay.style.display = 'block';
+            
+            const sliderBtns = document.querySelectorAll('.hero-slider-btn, .prev-btn, .next-btn');
+            sliderBtns.forEach(btn => btn.style.display = 'flex');
+
+            // Reset to first slide if coming from desktop
+            heroBg0.style.backgroundImage = `url('${sliderImages[0]}')`;
+            if (heroBgBlur0) heroBgBlur0.style.backgroundImage = `url('${sliderImages[0]}')`;
+            
+            gsap.set(heroBg0, { 
+                opacity: 1, 
+                zIndex: 2, 
+                clipPath: "circle(100% at 50% 50%)",
+                backgroundAttachment: "scroll",
+                xPercent: -50,
+                yPercent: -50,
+                left: "50%",
+                top: "50%"
+            });
+            if (heroBgBlur0) gsap.set(heroBgBlur0, { opacity: 1, zIndex: 1 });
+            gsap.set([heroBg1, heroBgBlur1], { opacity: 0, zIndex: 0, visibility: "visible" });
+            
+            heroBg0.classList.add('active-slide');
+            
+            currentSlide = 0;
+            activeLayer = 0;
+            startAutoSlide();
+        }
+    });
+
     // Preload next images lazily
     function preloadImages() {
         for(let i=1; i<3; i++) {
@@ -378,7 +457,6 @@ if (heroBg0 && heroBg1) {
         }
     }
     
-    startAutoSlide();
     preloadImages();
 }
 
