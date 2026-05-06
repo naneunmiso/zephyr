@@ -78,7 +78,8 @@
                             <!-- RM -->
                             <div class="swiper-slide bts-slide">
                                 <div class="slide-image-container">
-                                    <img src="https://images.unsplash.com/photo-1494806812796-244fe51b774d?q=80&w=3534&auto=format&fit=crop" class="slide-bg" alt="RM">
+                                    <div class="slide-bg-blur" style="background-image: url('/7/wisdom.png')"></div>
+                                    <img src="/7/wisdom.png" class="slide-bg" alt="RM">
                                     <div class="slide-overlay"></div>
                                 </div>
                                 <div class="slide-content">
@@ -91,7 +92,8 @@
                             <!-- JIN -->
                             <div class="swiper-slide bts-slide">
                                 <div class="slide-image-container">
-                                    <img src="https://images.unsplash.com/photo-1518710843675-2540dd79065c?q=80&w=3387&auto=format&fit=crop" class="slide-bg" alt="JIN">
+                                    <div class="slide-bg-blur" style="background-image: url('/7/elegance.png')"></div>
+                                    <img src="/7/elegance.png" class="slide-bg" alt="JIN">
                                     <div class="slide-overlay"></div>
                                 </div>
                                 <div class="slide-content">
@@ -104,7 +106,8 @@
                             <!-- SUGA -->
                             <div class="swiper-slide bts-slide">
                                 <div class="slide-image-container">
-                                    <img src="https://images.unsplash.com/photo-1590041794748-2d8eb73a571c?q=80&w=3456&auto=format&fit=crop" class="slide-bg" alt="SUGA">
+                                    <div class="slide-bg-blur" style="background-image: url('/7/resilience.png')"></div>
+                                    <img src="/7/resilience.png" class="slide-bg" alt="SUGA">
                                     <div class="slide-overlay"></div>
                                 </div>
                                 <div class="slide-content">
@@ -117,7 +120,8 @@
                             <!-- J-HOPE -->
                             <div class="swiper-slide bts-slide">
                                 <div class="slide-image-container">
-                                    <img src="https://images.unsplash.com/photo-1679420437432-80cfbf88986c?q=80&w=3540&auto=format&fit=crop" class="slide-bg" alt="J-HOPE">
+                                    <div class="slide-bg-blur" style="background-image: url('/7/hope.png')"></div>
+                                    <img src="/7/hope.png" class="slide-bg" alt="J-HOPE">
                                     <div class="slide-overlay"></div>
                                 </div>
                                 <div class="slide-content">
@@ -130,7 +134,8 @@
                             <!-- JIMIN -->
                             <div class="swiper-slide bts-slide">
                                 <div class="slide-image-container">
-                                    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=3540&auto=format&fit=crop" class="slide-bg" alt="JIMIN">
+                                    <div class="slide-bg-blur" style="background-image: url('/7/purest_love.jpeg')"></div>
+                                    <img src="/7/purest_love.jpeg" class="slide-bg" alt="JIMIN">
                                     <div class="slide-overlay"></div>
                                 </div>
                                 <div class="slide-content">
@@ -143,7 +148,8 @@
                             <!-- V -->
                             <div class="swiper-slide bts-slide">
                                 <div class="slide-image-container">
-                                    <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=3540&auto=format&fit=crop" class="slide-bg" alt="V">
+                                    <div class="slide-bg-blur" style="background-image: url('/7/rare_soul.png')"></div>
+                                    <img src="/7/rare_soul.png" class="slide-bg" alt="V">
                                     <div class="slide-overlay"></div>
                                 </div>
                                 <div class="slide-content">
@@ -156,7 +162,8 @@
                             <!-- JUNGKOOK -->
                             <div class="swiper-slide bts-slide">
                                 <div class="slide-image-container">
-                                    <img src="https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?q=80&w=3387&auto=format&fit=crop" class="slide-bg" alt="JUNGKOOK">
+                                    <div class="slide-bg-blur" style="background-image: url('/7/heart.png')"></div>
+                                    <img src="/7/heart.png" class="slide-bg" alt="JUNGKOOK">
                                     <div class="slide-overlay"></div>
                                 </div>
                                 <div class="slide-content">
@@ -175,8 +182,16 @@
                     </div>
                 </div>
 
-                <!-- The personal love note -->
-                <div class="utkarsh-note reveal-item">
+                <!-- Toggle button for the note -->
+                <div class="note-toggle-wrapper reveal-item">
+                    <button id="open-note-btn" class="cute-btn">
+                        <span>Read My Heart</span>
+                        <div class="btn-bubble"></div>
+                    </button>
+                </div>
+
+                <!-- The personal love note (initially hidden) -->
+                <div class="utkarsh-note" id="personal-note">
                     <div class="note-glow"></div>
                     <p class="note-from">— A voice from the stars —</p>
                     <p class="note-text">
@@ -231,86 +246,51 @@
         <section id="gallery" class="photo-gallery-section content-section">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="reveal-text">MOMENTS</h2>
-                    <p class="reveal-item sub-header">Every frame, a reason I love you more.</p>
+                    <h2 class="reveal-text">best part with you</h2>
+                    <p class="reveal-item sub-header">The magic of our first concert—a night where every melody felt like us.</p>
                 </div>
-                <div class="horizontal-gallery-wrapper">
-                    <div class="horizontal-gallery">
-                        <div class="photo-frame reveal-item"><div class="photo-img-wrapper"><img src="/photo1.webp" class="photo-img" alt="Moment 1" loading="lazy" decoding="async"></div></div>
-                        <div class="photo-frame reveal-item"><div class="photo-img-wrapper"><img src="/photo2.webp" class="photo-img" alt="Moment 2" loading="lazy" decoding="async"></div></div>
-                        <div class="photo-frame reveal-item"><div class="photo-img-wrapper"><img src="/photo3.webp" class="photo-img" alt="Moment 3" loading="lazy" decoding="async"></div></div>
-                        <div class="photo-frame reveal-item"><div class="photo-img-wrapper"><img src="/photo4.webp" class="photo-img" alt="Moment 4" loading="lazy" decoding="async"></div></div>
-                        <div class="photo-frame reveal-item"><div class="photo-img-wrapper"><img src="/photo5.webp" class="photo-img" alt="Moment 5" loading="lazy" decoding="async"></div></div>
-                        <div class="photo-frame reveal-item"><div class="photo-img-wrapper"><img src="/new_photo1.webp" class="photo-img" alt="Moment 6" loading="lazy" decoding="async"></div></div>
-                        <div class="photo-frame reveal-item"><div class="photo-img-wrapper"><img src="/new_photo2.webp" class="photo-img" alt="Moment 7" loading="lazy" decoding="async"></div></div>
-                        <div class="photo-frame reveal-item"><div class="photo-img-wrapper"><img src="/new_photo3.webp" class="photo-img" alt="Moment 8" loading="lazy" decoding="async"></div></div>
-                        <div class="photo-frame reveal-item"><div class="photo-img-wrapper"><img src="/new_photo4.webp" class="photo-img" alt="Moment 9" loading="lazy" decoding="async"></div></div>
-                        <div class="photo-frame reveal-item"><div class="photo-img-wrapper"><video src="/new_video.mp4" class="photo-img" autoplay muted loop playsinline></video></div></div>
+
+                <!-- Single Featured Video -->
+                <div class="featured-video-wrapper reveal-item">
+                    <div class="video-card featured-card">
+                        <video src="/moments/moment2.mp4" playsinline loop></video>
+                        <div class="video-controls">
+                            <div class="play-icon">▶</div>
+                            <p class="video-hint">CLICK TO PLAY WITH SOUND</p>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </section>
 
-        <!-- ═══ WISHES ═══ -->
-        <section id="magic-shop" class="magic-shop-section content-section">
-            <div class="magic-bg-glow"></div>
-            <div class="container">
-                <div class="section-header">
-                    <div class="bts-hangul-deco reveal-text">매직샵 · Magic Shop</div>
-                    <h2 class="reveal-text">The Magic Shop</h2>
-                    <p class="reveal-item sub-header">A place where your heart finds peace. Trade a worry for a piece of magic.</p>
-                </div>
-                
-                <div class="magic-container reveal-item">
-                    <div class="magic-orb-grid">
-                        <div class="magic-orb" data-wish="You are the most beautiful universe.">
-                            <div class="orb-inner"><span>✦</span></div>
-                            <p class="orb-label">Universe</p>
-                        </div>
-                        <div class="magic-orb" data-wish="Your smile is the cure to everything.">
-                            <div class="orb-inner"><span>✦</span></div>
-                            <p class="orb-label">Healing</p>
-                        </div>
-                        <div class="magic-orb" data-wish="You deserve all the flowers in the world.">
-                            <div class="orb-inner"><span>✦</span></div>
-                            <p class="orb-label">Bloom</p>
-                        </div>
-                        <div class="magic-orb" data-wish="You are the protagonist of your own story.">
-                            <div class="orb-inner"><span>✦</span></div>
-                            <p class="orb-label">Destiny</p>
-                        </div>
-                        <div class="magic-orb" data-wish="The stars shine brighter because of you.">
-                            <div class="orb-inner"><span>✦</span></div>
-                            <p class="orb-label">Light</p>
-                        </div>
-                        <div class="magic-orb" data-wish="You are loved more than words can say.">
-                            <div class="orb-inner"><span>✦</span></div>
-                            <p class="orb-label">Eternal</p>
-                        </div>
-                    </div>
 
-                    <div class="magic-display">
-                        <div class="display-content" id="magic-message">
-                            <p class="placeholder-text">Click an orb to reveal its magic...</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="magic-footer reveal-item">
-                    <p>"So show me, I'll show you..."</p>
-                    <span>— To Muskan, from the stars</span>
-                </div>
-            </div>
-        </section>
 
 
         <!-- ═══ FOOTER ═══ -->
         <footer class="footer">
-            <div class="footer-heart" id="footer-heart">♡</div>
-            <p class="footer-main">MUSKAN · 2004 — FOREVER</p>
-            <p class="footer-sub">Made with every bit of love I have, for the person who deserves the whole universe.</p>
-            <p class="footer-sig">— Your Constellation</p>
-            <p class="footer-last">With me or without me anywhere in your life — be always happy.</p>
+            <div class="footer-minimal-container">
+                <div class="footer-marquee-single">
+                    <div class="marquee-content">
+                        <span>MUSKAN · 2004 — FOREVER</span>
+                        <span class="sep">✦</span>
+                        <span>MADE WITH EVERY BIT OF LOVE I HAVE</span>
+                        <span class="sep">✦</span>
+                        <span class="highlight">WITH ME OR WITHOUT ME ANYWHERE IN YOUR LIFE — BE ALWAYS HAPPY ♡</span>
+                        <span class="sep">✦</span>
+                        <span class="signature">BY SOMEONE WHO KEEPS YOU IN THEIR PRAYERS, ALWAYS — YOUR CONSTELLATION</span>
+                        <!-- Duplicate for seamless loop -->
+                        <span class="sep">✦</span>
+                        <span>MUSKAN · 2004 — FOREVER</span>
+                        <span class="sep">✦</span>
+                        <span>MADE WITH EVERY BIT OF LOVE I HAVE</span>
+                        <span class="sep">✦</span>
+                        <span class="highlight">WITH ME OR WITHOUT ME ANYWHERE IN YOUR LIFE — BE ALWAYS HAPPY ♡</span>
+                        <span class="sep">✦</span>
+                        <span class="signature">BY SOMEONE WHO KEEPS YOU IN THEIR PRAYERS, ALWAYS — YOUR CONSTELLATION</span>
+                    </div>
+                </div>
+            </div>
         </footer>
 
     </main>

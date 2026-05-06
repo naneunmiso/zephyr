@@ -442,6 +442,95 @@ body {
 .wish-card p { font-style: italic; color: rgba(240,230,228,0.8); margin-bottom: 1rem; line-height: 1.7; }
 .wish-card span { font-family: var(--font-head); color: var(--accent); font-size: 1.1rem; }
 
+/* Section Titles */
+.section-title {
+  font-family: var(--font-head);
+  font-size: 2.5rem;
+  color: #fff;
+  text-align: center;
+  margin: 4rem 0 2rem;
+  letter-spacing: 3px;
+}
+
+/* Video Section */
+.video-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  margin-bottom: 4rem;
+}
+
+.video-card {
+  flex: 1 1 300px;
+  max-width: 350px;
+  aspect-ratio: 9 / 16;
+  background: #000;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  cursor: pointer;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.video-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 30px 60px rgba(232,139,155,0.2);
+}
+
+.video-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.7);
+  transition: filter 0.4s ease;
+}
+
+.video-card:hover video {
+  filter: brightness(1);
+}
+
+.video-controls {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.2);
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.video-card.playing .video-controls {
+  opacity: 0;
+}
+
+.play-icon {
+  width: 60px;
+  height: 60px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 20px var(--accent);
+}
+
+.video-hint {
+  font-size: 0.8rem;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.8;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .cards-grid { grid-template-columns: 1fr; }
@@ -449,6 +538,7 @@ body {
   .swiper { width: 300px; height: 440px; }
   .memories-masonry { column-count: 2; }
   .photo-card { flex: 0 0 80%; }
+  .video-card { max-width: 100%; flex: 1 1 100%; }
 }
 @media (max-width: 480px) {
   .memories-masonry { column-count: 1; }

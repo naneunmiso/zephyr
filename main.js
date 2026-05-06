@@ -152,6 +152,7 @@ let mm = gsap.matchMedia();
 mm.add("(min-width: 800px)", () => {
     // Desktop: Premium GSAP Pinned Horizontal Scroll
     galleryWrappers.forEach((wrapper) => {
+        if (wrapper.classList.contains('centered-gallery-wrapper')) return;
         const gallery = wrapper.querySelector('.horizontal-gallery');
         const photoFrames = gsap.utils.toArray(wrapper.querySelectorAll('.photo-frame'));
 
@@ -475,25 +476,52 @@ document.addEventListener("DOMContentLoaded", () => {
             loop: false,
         });
 
-        // Restore BTS Swiper
+        // Enhanced BTS Swiper with Parallax
         new Swiper('.bts-swiper', {
             effect: 'coverflow',
             grabCursor: true,
             centeredSlides: true,
             slidesPerView: 'auto',
             loop: true,
-            speed: 800,
+            speed: 1000,
             parallax: true,
+            mousewheel: {
+                forceToAxis: true,
+            },
             coverflowEffect: {
-                rotate: 5,
+                rotate: 0,
                 stretch: 0,
                 depth: 100,
-                modifier: 1.5,
+                modifier: 2.5,
                 slideShadows: false,
+            },
+            on: {
+                progress: function() {
+                    const swiper = this;
+                    for (let i = 0; i < swiper.slides.length; i++) {
+                        const slideProgress = swiper.slides[i].progress;
+                        const innerOffset = swiper.width * 0.5;
+                        const innerTranslate = slideProgress * innerOffset;
+                        const bg = swiper.slides[i].querySelector(".slide-bg");
+                        if (bg) {
+                            bg.style.transform = `translateX(${innerTranslate}px) scale(1.1)`;
+                        }
+                    }
+                },
+                setTransition: function(speed) {
+                    const swiper = this;
+                    for (let i = 0; i < swiper.slides.length; i++) {
+                        const bg = swiper.slides[i].querySelector(".slide-bg");
+                        if (bg) {
+                            bg.style.transition = `${speed}ms`;
+                        }
+                    }
+                }
             },
             pagination: {
                 el: '.bts-pagination',
                 clickable: true,
+                dynamicBullets: true,
             },
             navigation: {
                 nextEl: '.bts-nav-next',
@@ -554,26 +582,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 4000); // Change every 4 seconds
     }
 
-    // ═══ THE MAGIC SHOP LOGIC ═══
-    const orbs = document.querySelectorAll('.magic-orb');
-    const messageContainer = document.getElementById('magic-message');
 
-    if (orbs.length > 0 && messageContainer) {
-        orbs.forEach(orb => {
-            orb.addEventListener('click', () => {
-                orbs.forEach(o => o.classList.remove('active'));
-                orb.classList.add('active');
-                const message = orb.getAttribute('data-wish');
-                
-                messageContainer.style.opacity = '0';
-                messageContainer.style.transform = 'translateY(10px)';
-                
+
+    // Note Toggle Logic
+    const noteBtn = document.getElementById('open-note-btn');
+    const personalNote = document.getElementById('personal-note');
+
+    if (noteBtn && personalNote) {
+        noteBtn.addEventListener('click', () => {
+            personalNote.classList.toggle('show');
+            const isShowing = personalNote.classList.contains('show');
+            
+            noteBtn.querySelector('span').innerText = isShowing ? 'Close Letter' : 'Read My Heart';
+            
+            if (isShowing) {
+                // Scroll to note smoothly
                 setTimeout(() => {
-                    messageContainer.innerHTML = `<p>${message}</p>`;
-                    messageContainer.style.opacity = '1';
-                    messageContainer.style.transform = 'translateY(0)';
-                }, 400);
-            });
+                    personalNote.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 500);
+            }
         });
     }
 });
@@ -601,6 +628,29 @@ navLinks.forEach(link => {
             duration: 0.5,
             ease: "elastic.out(1, 0.3)"
         });
+    });
+});
+
+// Video Card Click to Play logic
+document.querySelectorAll('.video-card').forEach(card => {
+    const video = card.querySelector('video');
+    if (!video) return;
+    
+    card.addEventListener('click', () => {
+        if (video.paused) {
+            // Pause all other videos
+            document.querySelectorAll('video').forEach(v => {
+                if (v !== video) v.pause();
+            });
+            document.querySelectorAll('.video-card').forEach(c => c.classList.remove('playing'));
+            
+            video.play();
+            video.muted = false;
+            card.classList.add('playing');
+        } else {
+            video.pause();
+            card.classList.remove('playing');
+        }
     });
 });
 

@@ -94,6 +94,30 @@ export function initLazyImages() {
   imgs.forEach(img => observer.observe(img));
 }
 
+// ── VIDEO INTERACTION ────────────────────────────────────────
+export function initVideos() {
+  document.querySelectorAll('.video-card').forEach(card => {
+    const video = card.querySelector('video');
+    card.addEventListener('click', () => {
+      if (video.paused) {
+        // Pause all other videos
+        document.querySelectorAll('video').forEach(v => {
+          if (v !== video) {
+            v.pause();
+            v.parentElement.classList.remove('playing');
+          }
+        });
+        video.play();
+        video.muted = false;
+        card.classList.add('playing');
+      } else {
+        video.pause();
+        card.classList.remove('playing');
+      }
+    });
+  });
+}
+
 // ── PAGE TRANSITION ──────────────────────────────────────────
 export function initPageTransitions() {
   document.querySelectorAll('a[href]').forEach(link => {

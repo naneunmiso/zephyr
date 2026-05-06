@@ -36,8 +36,34 @@
       </div>
     </div>
 
+    <!-- Cinematic Moments Section -->
+    <h2 class="section-title">Cinematic Moments</h2>
+    <div class="video-container">
+      <div class="video-card">
+        <video src="/moments/moment1.mp4" playsinline loop></video>
+        <div class="video-controls">
+          <div class="play-icon">▶</div>
+          <p class="video-hint">Click to play with sound</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <video src="/moments/moment2.mp4" playsinline loop></video>
+        <div class="video-controls">
+          <div class="play-icon">▶</div>
+          <p class="video-hint">Click to play with sound</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <video src="/moments/moment3.mp4" playsinline loop></video>
+        <div class="video-controls">
+          <div class="play-icon">▶</div>
+          <p class="video-hint">Click to play with sound</p>
+        </div>
+      </div>
+    </div>
+
     <!-- Masonry grid -->
-    <h2 style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:#fff;text-align:center;margin:4rem 0 2rem;letter-spacing:3px;">All Frames</h2>
+    <h2 class="section-title">All Frames</h2>
     <div class="memories-masonry">
       <div class="mem-item"><img src="/memories/Screenshot 2026-05-02 at 10.13.57 PM.webp" alt="memory"></div>
       <div class="mem-item"><img src="/memories/Screenshot 2026-05-02 at 10.14.01 PM.webp" alt="memory"></div>
@@ -72,9 +98,10 @@
   </div>
 
   <script type="module">
-    import { initSakura, initPageTransitions } from '../src/dashboard.js';
+    import { initSakura, initPageTransitions, initVideos } from '../src/dashboard.js';
     initSakura();
     initPageTransitions();
+    initVideos();
   </script>
 </body>
 </html>
