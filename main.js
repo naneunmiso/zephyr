@@ -657,9 +657,23 @@ document.querySelectorAll('.video-card').forEach(card => {
             });
             document.querySelectorAll('.video-card').forEach(c => c.classList.remove('playing'));
             
-            video.play();
             video.muted = false;
-            card.classList.add('playing');
+            const playPromise = video.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    card.classList.add('playing');
+                }).catch(error => {
+                    console.log("Playback failed:", error);
+                    // Fallback for strict mobile browsers: play muted first
+                    video.muted = true;
+                    video.play().then(() => {
+                        card.classList.add('playing');
+                    }).catch(e => console.log("Muted playback failed:", e));
+                });
+            } else {
+                card.classList.add('playing');
+            }
         } else {
             video.pause();
             card.classList.remove('playing');
