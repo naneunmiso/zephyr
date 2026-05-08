@@ -66,12 +66,12 @@ body {
     border-radius: 24px;
     overflow: hidden;
     position: relative;
-    transition: transform 0.6s cubic-bezier(0.2, 0, 0.2, 1);
     background: #111;
+    /* Removed transition: transform to prevent fighting Swiper's inline transforms */
+    transition: box-shadow 0.6s cubic-bezier(0.2, 0, 0.2, 1);
 }
 
 .bts-slide.swiper-slide-active {
-    transform: scale(1.05);
     box-shadow: 0 40px 100px rgba(0,0,0,0.8), 0 0 40px rgba(124,58,237,0.2);
 }
 
@@ -225,6 +225,8 @@ body {
     .bts-slide { width: 85vw !important; height: 450px; }
     .slide-content h3 { font-size: 1.8rem; }
     .bts-nav-prev, .bts-nav-next { display: none; }
+    .slide-bg-blur { display: none; }
+    .bts-slide.swiper-slide-active { box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 }
 
 /* ═══════════════════════════════════════════
@@ -1607,7 +1609,10 @@ section {
     
     /* Reduce blur on mobile for performance */
     .hero-bg-blur { filter: blur(12px) brightness(0.35); }
-    .navbar { backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); }
+    .navbar { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(6,3,5,0.98); }
+    
+    /* Hide grain overlay to fix mobile scroll lag */
+    .grain-overlay { display: none !important; }
     
     .hero-bg {
         background-size: cover;
@@ -1618,6 +1623,16 @@ section {
     .hero-content h1 {
         font-size: clamp(2.4rem, 11vw, 4rem);
         line-height: 0.95;
+    }
+
+    .letters-section::before {
+        animation: none;
+        opacity: 0.8;
+    }
+    
+    .for-her-bg-glow, .note-glow {
+        animation: none;
+        transform: none;
     }
 
     .letters-swiper {

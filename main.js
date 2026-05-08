@@ -199,20 +199,22 @@ mm.add("(min-width: 800px)", () => {
 
 mm.add("(max-width: 799px)", () => {
     // Mobile: Native Horizontal Scroll (No pinning)
-    const allPhotoFrames = gsap.utils.toArray('.horizontal-gallery .photo-frame');
-    allPhotoFrames.forEach((frame) => {
-        gsap.from(frame, {
-            y: 50,
+    // Animate the entire gallery wrapper instead of individual frames to avoid lag
+    // inside the overflow-x container.
+    const gallery = document.querySelector('.horizontal-gallery');
+    if (gallery) {
+        gsap.from(gallery, {
+            y: 30,
             opacity: 0,
             duration: 0.8,
             ease: "power2.out",
             scrollTrigger: {
-                trigger: frame,
+                trigger: gallery,
                 start: "top 85%",
                 toggleActions: "play none none reverse"
             }
         });
-    });
+    }
 });
 
 // Hero Background Slideshow
@@ -477,26 +479,28 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         // Enhanced BTS Swiper with Parallax
+        const isMobileSwiper = window.innerWidth < 768;
         new Swiper('.bts-swiper', {
             effect: 'coverflow',
             grabCursor: true,
             centeredSlides: true,
             slidesPerView: 'auto',
             loop: true,
-            speed: 1000,
-            parallax: true,
+            speed: isMobileSwiper ? 600 : 1000,
+            parallax: !isMobileSwiper,
             mousewheel: {
                 forceToAxis: true,
             },
             coverflowEffect: {
-                rotate: 0,
+                rotate: isMobileSwiper ? 5 : 0,
                 stretch: 0,
-                depth: 100,
-                modifier: 2.5,
+                depth: isMobileSwiper ? 50 : 100,
+                modifier: isMobileSwiper ? 1.5 : 2.5,
                 slideShadows: false,
             },
             on: {
                 progress: function() {
+                    if (isMobileSwiper) return; // Disable heavy JS parallax on mobile
                     const swiper = this;
                     for (let i = 0; i < swiper.slides.length; i++) {
                         const slideProgress = swiper.slides[i].progress;
@@ -509,6 +513,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 },
                 setTransition: function(speed) {
+                    if (isMobileSwiper) return;
                     const swiper = this;
                     for (let i = 0; i < swiper.slides.length; i++) {
                         const bg = swiper.slides[i].querySelector(".slide-bg");
@@ -531,7 +536,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Falling Sakura Petals Effect
+    const isMobile = window.innerWidth < 800;
+    let petalCount = 0;
+    const maxPetalsMobile = 15;
+
     function createPetal() {
+        if (isMobile && petalCount >= maxPetalsMobile) return;
+
         const petal = document.createElement('div');
         petal.classList.add('sakura-petal');
         
@@ -548,15 +559,17 @@ document.addEventListener("DOMContentLoaded", () => {
         petal.style.animationDelay = `${delay}s`;
         
         document.body.appendChild(petal);
+        petalCount++;
         
         // Remove after animation to prevent DOM bloat
         setTimeout(() => {
             if(petal.parentNode) petal.remove();
+            petalCount--;
         }, (duration + delay) * 1000);
     }
 
-    // Create petals periodically
-    setInterval(createPetal, 400);
+    // Create petals periodically, less frequently on mobile
+    setInterval(createPetal, isMobile ? 800 : 400);
 
     // Navbar Quotes Logic
     const navLogo = document.getElementById('dynamic-nav-logo');
