@@ -695,6 +695,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (noteBtn && personalNote) {
         noteBtn.addEventListener('click', () => {
             personalNote.classList.add('show');
+            document.body.classList.add('letter-open'); // Add class to hide navbar
             document.body.style.overflow = 'hidden'; // lock scroll
             // GSAP animate in
             gsap.fromTo('.note-modal-content', 
@@ -707,6 +708,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (closeNoteBtn && personalNote) {
         closeNoteBtn.addEventListener('click', () => {
             personalNote.classList.remove('show');
+            document.body.classList.remove('letter-open'); // Remove class to show navbar
             document.body.style.overflow = ''; // unlock scroll
         });
     }
