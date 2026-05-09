@@ -1682,11 +1682,23 @@ section {
     padding: 4rem 3.5rem;
     max-width: 650px;
     width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
     text-align: center;
     position: relative;
     box-shadow: 0 50px 100px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
     transform: scale(0.9);
     transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-color) transparent;
+}
+
+.note-modal-content::-webkit-scrollbar {
+    width: 4px;
+}
+.note-modal-content::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 10px;
 }
 
 .utkarsh-note.show .note-modal-content {
@@ -2269,5 +2281,28 @@ section {
     
     .masonry-grid {
         column-count: 1;
+    }
+}
+@media (max-width: 768px) {
+    .note-modal-content {
+        padding: 3rem 1.5rem;
+        width: 95%;
+        border-radius: 24px;
+    }
+    .note-text {
+        font-size: 1.15rem !important;
+        line-height: 1.8;
+    }
+    .note-signature {
+        font-size: 1.4rem !important;
+    }
+    .modal-close-btn {
+        top: -3.5rem;
+        padding: 0.6rem 1.5rem;
+        font-size: 0.65rem;
+    }
+    .ai-magic-cake {
+        font-size: 2.5rem;
+        margin-top: 1.5rem;
     }
 }
