@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
     <script>document.documentElement.className += " js-enabled";</script>
     <style>
         @keyframes fadeInSafe { to { opacity: 1; visibility: visible; transform: none; } }
@@ -27,16 +27,34 @@
 <body>
     <div class="grain-overlay"></div>
     
+    <!-- Mobile Drawer -->
+    <div class="mobile-nav-drawer" id="mobile-drawer">
+        <button class="mobile-drawer-close" id="drawer-close" aria-label="Close menu">&times;</button>
+        <a href="#hero"    onclick="closeMobileDrawer()">Home</a>
+        <a href="#for-her" onclick="closeMobileDrawer()">보라해</a>
+        <a href="#favorite-chapter" onclick="closeMobileDrawer()">Fav Chapter</a>
+        <a href="#gallery" onclick="closeMobileDrawer()">Moments</a>
+        <a href="#wishes"  onclick="closeMobileDrawer()">Wishes</a>
+        <p class="mobile-nav-deco">보라해 · I purple you</p>
+    </div>
+
     <div class="navbar-wrapper" id="navbar-wrapper">
-    <nav class="navbar">
+    <nav class="navbar" id="main-navbar">
         <div class="nav-logo" id="dynamic-nav-logo">Zephyr</div>
-        <div class="nav-links">
-            <a href="#hero">HOME</a>
-            <a href="#for-her">보라해</a>
-            <a href="#favorite-chapter">FAV CHAPTER</a>
-            <a href="#gallery">MOMENTS</a>
-            <a href="#wishes">WISHES</a>
+        <div class="nav-links" id="nav-links">
+            <!-- Sliding active pill -->
+            <div class="nav-active-pill" id="nav-active-pill"></div>
+            <a href="#hero"             data-section="hero">HOME</a>
+            <a href="#for-her"          data-section="for-her">보라해</a>
+            <a href="#favorite-chapter" data-section="favorite-chapter">FAV CHAPTER</a>
+            <a href="#gallery"          data-section="gallery">MOMENTS</a>
         </div>
+        <!-- Hamburger (mobile only) -->
+        <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
     </div>
 
@@ -50,13 +68,33 @@
             <div id="hero-slider-bg-1" class="hero-bg" style="opacity: 0;"></div>
             <div class="hero-overlay"></div>
 
+            <!-- Confetti layer (JS-populated) -->
+            <div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
+
+            <!-- Floating birthday stickers -->
+            <div class="bday-stickers" aria-hidden="true">
+                <span class="sticker s1">🎂</span>
+                <span class="sticker s2">🌸</span>
+                <span class="sticker s3">✨</span>
+                <span class="sticker s4">🎉</span>
+                <span class="sticker s5">💜</span>
+                <span class="sticker s6">🌟</span>
+                <span class="sticker s7">🎀</span>
+                <span class="sticker s8">🫧</span>
+                <span class="sticker s9">🍰</span>
+                <span class="sticker s10">🌙</span>
+            </div>
+
             <div class="hero-content">
-                <p class="hero-eyebrow reveal-text">✦ Today is her day ✦</p>
+                <p class="hero-eyebrow reveal-text">✨ June 25, 2004 ✨</p>
                 <h1 class="reveal-text">HAPPY</h1>
                 <h1 class="reveal-text highlight">BIRTHDAY</h1>
-                <h1 class="reveal-text">MUSKAN</h1>
-                <p class="hero-sub reveal-item">EST. 2004 • THE JOURNEY CONTINUES</p>
-                <p class="hero-personal reveal-item">"You are the most beautiful part of my world."</p>
+                <h1 class="reveal-text hero-name-muskan">MUSKAN</h1>
+                <!-- Birthday badge -->
+                <div class="bday-badge reveal-item">
+                    <span class="bday-badge-inner">🎂 Turning 22 &bull; June 25 &bull; Forever Loved 🎀</span>
+                </div>
+                <p class="hero-personal reveal-item">&ldquo;You are the most beautiful part of my world.&rdquo;</p>
             </div>
         </section>
 
@@ -190,15 +228,21 @@
                     </button>
                 </div>
 
-                <!-- The personal love note (initially hidden) -->
+                <!-- The personal love note (popup modal) -->
                 <div class="utkarsh-note" id="personal-note">
-                    <div class="note-glow"></div>
-                    <p class="note-from">— A voice from the stars —</p>
-                    <p class="note-text">
-                        "Muskan, I built this for you. Not because it's your birthday, but because you deserve to be celebrated — every single day. You are my favourite person in this whole universe. I can't imagine a version of my life without you in it. So here's this — imperfect but full of love — because you matter more than words could ever say.
-                        <br><br>Happy Birthday, my serendipity. 🌸"
-                    </p>
-                    <p class="note-signature">With all my heart, A soul who keeps you in their prayers ♡</p>
+                    <div class="note-modal-content">
+                        <button class="modal-close-btn" id="close-note-btn">CLOSE LETTER</button>
+                        <div class="note-glow"></div>
+                        <p class="note-from">— A voice from the stars —</p>
+                        <p class="note-text">
+                            "Muskan, I built this for you. Not because it's your birthday, but because you deserve to be celebrated — every single day. You are my favourite person in this whole universe. I can't imagine a version of my life without you in it. So here's this — imperfect but full of love — because you matter more than words could ever say.
+                            <br><br>Happy Birthday, my serendipity. 🌸"
+                        </p>
+                        <p class="note-signature">With all my heart, A soul who keeps you in their prayers ♡</p>
+                        
+                        <!-- AI Generated Magic Cake -->
+                        <div class="ai-magic-cake" id="magic-cake-btn" title="Tap to blow the candle">🎂</div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -244,6 +288,7 @@
 
         <!-- ═══ MOMENTS GALLERY ═══ -->
         <section id="gallery" class="photo-gallery-section content-section">
+            <div class="gallery-ambient-glow"></div>
             <div class="container">
                 <div class="section-header">
                     <h2 class="reveal-text">best part with you</h2>
@@ -252,12 +297,40 @@
 
                 <!-- Single Featured Video -->
                 <div class="featured-video-wrapper reveal-item">
-                    <div class="video-card featured-card">
-                        <video src="/moments/moment2.mp4" playsinline loop muted preload="auto"></video>
-                        <div class="video-controls">
-                            <div class="play-icon">▶</div>
-                            <p class="video-hint">CLICK TO PLAY WITH SOUND</p>
+                    <!-- Phone frame mockup -->
+                    <div class="phone-frame-mockup">
+                        <div class="phone-notch"></div>
+                        <div class="phone-screen">
+                            <div class="video-card featured-card" id="main-video-card">
+                                <!-- Animated border -->
+                                <div class="video-frame-border"></div>
+                                <video 
+                                    id="moment-video"
+                                    src="/moments/moment2.mp4" 
+                                    playsinline 
+                                    webkit-playsinline
+                                    x5-playsinline
+                                    x5-video-player-type="h5"
+                                    loop 
+                                    muted 
+                                    preload="metadata"
+                                ></video>
+                                <!-- Play Overlay -->
+                                <div class="video-controls" id="video-play-overlay">
+                                    <div class="play-pulse-ring"></div>
+                                    <div class="play-icon" id="play-btn-icon">&#9654;</div>
+                                    <p class="video-hint">TAP TO PLAY</p>
+                                </div>
+                                <!-- Sound Toggle -->
+                                <button class="sound-toggle-btn" id="sound-toggle-btn" aria-label="Toggle sound">
+                                    <span class="sound-icon muted-icon">&#128263;</span>
+                                    <span class="sound-label">TAP FOR SOUND</span>
+                                </button>
+                            </div>
                         </div>
+                        <div class="phone-home-bar"></div>
+                        <!-- Floating concert labels -->
+                        <div class="phone-tag phone-tag-top">&#9726; A Memorable Night at IIIT BBSR on 13th March 2k26 &#9726;</div>
                     </div>
                 </div>
 

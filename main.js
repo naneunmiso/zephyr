@@ -102,18 +102,108 @@ gsap.to(".sticky-icon", {
     ease: "none"
 });
 
-// Navbar background on scroll
-gsap.to(".navbar", {
-    scrollTrigger: {
-        trigger: "body",
-        start: "100px top",
-        toggleActions: "play none none reverse"
-    },
-    backgroundColor: "rgba(6, 3, 5, 0.95)",
-    backdropFilter: "blur(20px)",
-    padding: "0.8rem 1.5rem",
-    duration: 0.3
-});
+// ─── Enhanced Navbar Controller ───────────────────────────────────────────
+(function initNavbar() {
+    const wrapper   = document.getElementById('navbar-wrapper');
+    const navLinks  = document.getElementById('nav-links');
+    const pill      = document.getElementById('nav-active-pill');
+    const hamburger = document.getElementById('nav-hamburger');
+    const drawer    = document.getElementById('mobile-drawer');
+    const drawerClose = document.getElementById('drawer-close');
+    const links     = document.querySelectorAll('#nav-links a[data-section]');
+
+    // ── 1. Scroll-shrink ─────────────────────────────────────────────────
+    const shrinkThreshold = 80;
+    let lastScrollY = 0;
+
+    function onScroll() {
+        const y = window.scrollY || document.documentElement.scrollTop;
+        if (wrapper) {
+            wrapper.classList.toggle('scrolled', y > shrinkThreshold);
+        }
+        lastScrollY = y;
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll(); // run once on load
+
+    // ── 2. Active section tracker (IntersectionObserver) ─────────────────
+    const sectionIds = ['hero', 'for-her', 'favorite-chapter', 'gallery', 'wishes'];
+    const sectionEls = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+
+    function setActiveLink(id) {
+        links.forEach(a => {
+            const isActive = a.dataset.section === id;
+            a.classList.toggle('active', isActive);
+        });
+        movePill(id);
+    }
+
+    // Sliding pill position
+    function movePill(id) {
+        if (!pill || !navLinks) return;
+        const activeLink = navLinks.querySelector(`a[data-section="${id}"]`);
+        if (!activeLink) {
+            pill.classList.remove('visible');
+            return;
+        }
+        const linkRect    = activeLink.getBoundingClientRect();
+        const linksRect   = navLinks.getBoundingClientRect();
+        pill.style.left   = (linkRect.left - linksRect.left) + 'px';
+        pill.style.width  = linkRect.width + 'px';
+        pill.classList.add('visible');
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                setActiveLink(entry.target.id);
+            }
+        });
+    }, { threshold: 0.35 });
+
+    sectionEls.forEach(el => observer.observe(el));
+    // Set initial active
+    if (sectionEls.length) setActiveLink(sectionEls[0].id);
+
+    // Recalculate pill on resize
+    let pillTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(pillTimeout);
+        pillTimeout = setTimeout(() => {
+            const active = navLinks?.querySelector('a.active');
+            if (active) movePill(active.dataset.section);
+        }, 100);
+    });
+
+    // ── 3. Hamburger & Mobile Drawer ─────────────────────────────────────
+    function openMobileDrawer() {
+        if (!hamburger || !drawer) return;
+        hamburger.classList.add('open');
+        drawer.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    window.closeMobileDrawer = function() {
+        if (!hamburger || !drawer) return;
+        hamburger.classList.remove('open');
+        drawer.classList.remove('open');
+        document.body.style.overflow = '';
+    };
+
+    if (hamburger) hamburger.addEventListener('click', openMobileDrawer);
+    if (drawerClose) drawerClose.addEventListener('click', closeMobileDrawer);
+    // Close on backdrop click
+    if (drawer) {
+        drawer.addEventListener('click', (e) => {
+            if (e.target === drawer) closeMobileDrawer();
+        });
+    }
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMobileDrawer();
+    });
+})();
+
 
 // Cursor Interaction (Optional - Premium feel)
 const cursor = document.createElement('div');
@@ -597,24 +687,84 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // Note Toggle Logic
+    // Note Modal Logic
     const noteBtn = document.getElementById('open-note-btn');
     const personalNote = document.getElementById('personal-note');
+    const closeNoteBtn = document.getElementById('close-note-btn');
 
     if (noteBtn && personalNote) {
         noteBtn.addEventListener('click', () => {
-            personalNote.classList.toggle('show');
-            const isShowing = personalNote.classList.contains('show');
+            personalNote.classList.add('show');
+            document.body.style.overflow = 'hidden'; // lock scroll
+            // GSAP animate in
+            gsap.fromTo('.note-modal-content', 
+                { y: 50, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", delay: 0.1 }
+            );
+        });
+    }
+
+    if (closeNoteBtn && personalNote) {
+        closeNoteBtn.addEventListener('click', () => {
+            personalNote.classList.remove('show');
+            document.body.style.overflow = ''; // unlock scroll
+        });
+    }
+
+    // AI Magic Cake Blow Effect
+    const magicCakeBtn = document.getElementById('magic-cake-btn');
+    if (magicCakeBtn) {
+        magicCakeBtn.addEventListener('click', (e) => {
+            if (magicCakeBtn.classList.contains('blown')) return;
             
-            noteBtn.querySelector('span').innerText = isShowing ? 'Close Letter' : 'Read My Heart';
+            magicCakeBtn.classList.add('blown');
+            magicCakeBtn.innerText = '🍰'; // change to sliced cake
             
-            if (isShowing) {
-                // Scroll to note smoothly
-                setTimeout(() => {
-                    personalNote.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 500);
+            // Generate confetti burst
+            for(let i = 0; i < 40; i++) {
+                const conf = document.createElement('div');
+                conf.className = 'confetti-piece';
+                conf.style.left = `calc(50% + ${(Math.random() - 0.5) * 100}px)`;
+                conf.style.top = `calc(50% + ${(Math.random() - 0.5) * 100}px)`;
+                conf.style.backgroundColor = ['#e88b9b', '#f9a8c9', '#c9a96e', '#a78bfa'][Math.floor(Math.random() * 4)];
+                conf.style.animation = `confettiFall ${1 + Math.random()}s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
+                
+                // Explode outwards
+                gsap.fromTo(conf, 
+                    { x: 0, y: 0, scale: 0 },
+                    { 
+                        x: (Math.random() - 0.5) * 300, 
+                        y: (Math.random() - 0.5) * 300 - 100,
+                        scale: Math.random() * 1.5 + 0.5,
+                        rotation: Math.random() * 360,
+                        duration: 0.8, 
+                        ease: "power2.out",
+                        onComplete: () => {
+                            gsap.to(conf, { y: "+=200", opacity: 0, duration: 1, ease: "power1.in" });
+                        }
+                    }
+                );
+                
+                personalNote.querySelector('.note-modal-content').appendChild(conf);
+                
+                // Cleanup
+                setTimeout(() => conf.remove(), 2000);
             }
         });
+    }
+
+    // Hero Background Confetti Generator
+    const heroConfetti = document.getElementById('confetti-container');
+    if (heroConfetti) {
+        for(let i = 0; i < 30; i++) {
+            const conf = document.createElement('div');
+            conf.className = 'confetti-piece';
+            conf.style.left = `${Math.random() * 100}%`;
+            conf.style.animationDelay = `${Math.random() * 5}s`;
+            conf.style.animationDuration = `${4 + Math.random() * 4}s`;
+            conf.style.backgroundColor = ['#e88b9b', '#f9a8c9', '#c9a96e', '#a78bfa', '#ffffff'][Math.floor(Math.random() * 5)];
+            heroConfetti.appendChild(conf);
+        }
     }
 });
 
@@ -644,41 +794,81 @@ navLinks.forEach(link => {
     });
 });
 
-// Video Card Click to Play logic
-document.querySelectorAll('.video-card').forEach(card => {
-    const video = card.querySelector('video');
-    if (!video) return;
-    
-    card.addEventListener('click', () => {
-        if (video.paused) {
-            // Pause all other videos
-            document.querySelectorAll('video').forEach(v => {
-                if (v !== video) v.pause();
-            });
-            document.querySelectorAll('.video-card').forEach(c => c.classList.remove('playing'));
-            
-            video.muted = false;
-            const playPromise = video.play();
-            
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    card.classList.add('playing');
-                }).catch(error => {
-                    console.log("Playback failed:", error);
-                    // Fallback for strict mobile browsers: play muted first
-                    video.muted = true;
-                    video.play().then(() => {
-                        card.classList.add('playing');
-                    }).catch(e => console.log("Muted playback failed:", e));
-                });
-            } else {
+// ─── Mobile-Safe Video Player ─────────────────────────────────────────────
+// iOS/Android block programmatic unmuting without a direct user gesture.
+// Strategy: always start muted, then offer a dedicated sound toggle button.
+(function initVideoPlayer() {
+    const card    = document.getElementById('main-video-card');
+    const video   = document.getElementById('moment-video');
+    const overlay = document.getElementById('video-play-overlay');
+    const soundBtn = document.getElementById('sound-toggle-btn');
+    if (!card || !video) return;
+
+    let isPlaying = false;
+
+    // ── Helper: update sound button state ────────────────────────────────
+    function updateSoundBtn() {
+        if (!soundBtn) return;
+        const icon  = soundBtn.querySelector('.sound-icon');
+        const label = soundBtn.querySelector('.sound-label');
+        if (video.muted) {
+            icon.textContent  = '🔇';
+            label.textContent = 'TAP FOR SOUND';
+            soundBtn.classList.remove('unmuted');
+        } else {
+            icon.textContent  = '🔊';
+            label.textContent = 'MUTE';
+            soundBtn.classList.add('unmuted');
+        }
+    }
+
+    // ── Play video (always muted to satisfy autoplay policy) ─────────────
+    function startPlay() {
+        video.muted = true; // Required for autoplay on mobile
+        const p = video.play();
+        if (p !== undefined) {
+            p.then(() => {
+                isPlaying = true;
                 card.classList.add('playing');
-            }
+                if (soundBtn) soundBtn.classList.add('visible');
+                updateSoundBtn();
+            }).catch(err => {
+                console.warn('Video play failed:', err);
+            });
+        } else {
+            isPlaying = true;
+            card.classList.add('playing');
+            if (soundBtn) soundBtn.classList.add('visible');
+            updateSoundBtn();
+        }
+    }
+
+    // ── Tap on card body → toggle play/pause ─────────────────────────────
+    card.addEventListener('click', (e) => {
+        // Don't toggle play when tapping the sound button
+        if (soundBtn && soundBtn.contains(e.target)) return;
+
+        if (!isPlaying || video.paused) {
+            startPlay();
         } else {
             video.pause();
+            isPlaying = false;
             card.classList.remove('playing');
+            if (soundBtn) soundBtn.classList.remove('visible');
         }
     });
-});
+
+    // ── Sound toggle button (separate gesture = browser allows unmuting) ─
+    if (soundBtn) {
+        soundBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent card click
+            if (!isPlaying || video.paused) return;
+            video.muted = !video.muted;
+            updateSoundBtn();
+        });
+    }
+})();
+
+
 
 
