@@ -11,6 +11,8 @@ const lenis = new Lenis({
     infinite: false,
 });
 
+window.lenis = lenis;
+
 function raf(time) {
     lenis.raf(time);
     requestAnimationFrame(raf);
@@ -576,40 +578,50 @@ document.addEventListener("DOMContentLoaded", () => {
             centeredSlides: true,
             slidesPerView: 'auto',
             loop: true,
-            speed: isMobileSwiper ? 600 : 1000,
-            parallax: !isMobileSwiper,
+            speed: isMobileSwiper ? 800 : 1200,
+            parallax: true,
             mousewheel: {
                 forceToAxis: true,
             },
             coverflowEffect: {
-                rotate: isMobileSwiper ? 5 : 0,
-                stretch: 0,
-                depth: isMobileSwiper ? 50 : 100,
-                modifier: isMobileSwiper ? 1.5 : 2.5,
+                rotate: isMobileSwiper ? 0 : 5,
+                stretch: isMobileSwiper ? 0 : -10,
+                depth: isMobileSwiper ? 100 : 200,
+                modifier: 1,
                 slideShadows: false,
             },
             on: {
                 progress: function() {
-                    if (isMobileSwiper) return; // Disable heavy JS parallax on mobile
                     const swiper = this;
                     for (let i = 0; i < swiper.slides.length; i++) {
                         const slideProgress = swiper.slides[i].progress;
-                        const innerOffset = swiper.width * 0.5;
-                        const innerTranslate = slideProgress * innerOffset;
+                        const absProgress = Math.abs(slideProgress);
+                        
+                        // Enhanced Parallax for background image
                         const bg = swiper.slides[i].querySelector(".slide-bg");
                         if (bg) {
-                            bg.style.transform = `translateX(${innerTranslate}px) scale(1.1)`;
+                            const translate = slideProgress * swiper.width * 0.15;
+                            const scale = 1 + (absProgress * 0.1);
+                            bg.style.transform = `translateX(${translate}px) scale(${scale})`;
+                        }
+
+                        // Content fade and lift
+                        const content = swiper.slides[i].querySelector(".slide-content");
+                        if (content) {
+                            const opacity = 1 - Math.min(1, absProgress * 1.5);
+                            const translateY = absProgress * 50;
+                            content.style.opacity = opacity;
+                            content.style.transform = `translateY(${translateY}px)`;
                         }
                     }
                 },
                 setTransition: function(speed) {
-                    if (isMobileSwiper) return;
                     const swiper = this;
                     for (let i = 0; i < swiper.slides.length; i++) {
                         const bg = swiper.slides[i].querySelector(".slide-bg");
-                        if (bg) {
-                            bg.style.transition = `${speed}ms`;
-                        }
+                        const content = swiper.slides[i].querySelector(".slide-content");
+                        if (bg) bg.style.transition = `${speed}ms cubic-bezier(0.2, 0, 0.2, 1)`;
+                        if (content) content.style.transition = `${speed}ms cubic-bezier(0.2, 0, 0.2, 1)`;
                     }
                 }
             },
@@ -697,10 +709,12 @@ document.addEventListener("DOMContentLoaded", () => {
             personalNote.classList.add('show');
             document.body.classList.add('letter-open'); // Add class to hide navbar
             document.body.style.overflow = 'hidden'; // lock scroll
+            if (window.lenis) window.lenis.stop(); // Stop Lenis
+            
             // GSAP animate in
             gsap.fromTo('.note-modal-content', 
                 { y: 50, opacity: 0 }, 
-                { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", delay: 0.1 }
+                { y: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.1 }
             );
         });
     }
@@ -710,6 +724,7 @@ document.addEventListener("DOMContentLoaded", () => {
             personalNote.classList.remove('show');
             document.body.classList.remove('letter-open'); // Remove class to show navbar
             document.body.style.overflow = ''; // unlock scroll
+            if (window.lenis) window.lenis.start(); // Start Lenis
         });
     }
 
@@ -870,6 +885,7 @@ navLinks.forEach(link => {
         });
     }
 })();
+
 
 
 

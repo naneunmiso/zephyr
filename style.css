@@ -97,11 +97,12 @@ body {
     position: relative;
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
+    object-position: center 20%;
     z-index: 1;
-    transition: transform 0.8s cubic-bezier(0.2, 0, 0.2, 1);
-    transform: scale(0.9);
-    opacity: 0.8;
+    transition: transform 1.2s cubic-bezier(0.2, 0, 0.2, 1), opacity 0.8s ease;
+    transform: scale(1.1); /* Subtle zoom for parallax */
+    opacity: 0.7;
 }
 
 .swiper-slide-active .slide-bg {
@@ -110,7 +111,8 @@ body {
 }
 
 .swiper-slide-active .slide-bg-blur {
-    transform: scale(1);
+    transform: scale(1.1);
+    opacity: 0.4;
 }
 
 .slide-overlay {
@@ -1665,17 +1667,18 @@ section {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: rgba(10, 6, 12, 0.98); /* Deep solid background for "new page" feel */
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    z-index: 10001; /* Above everything including navbar */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: linear-gradient(135deg, #fff5f7 0%, #ffe4e8 100%) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    z-index: 10001;
+    display: block; /* Use block for more reliable scroll behavior */
+    overflow-y: auto;
+    overflow-x: hidden;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-overflow-scrolling: touch;
 }
 
 .utkarsh-note.show {
@@ -1685,24 +1688,23 @@ section {
 }
 
 .note-modal-content {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(232, 139, 155, 0.2);
-    border-radius: 40px;
-    padding: 6rem 4rem 4rem; /* Top padding for close button space */
-    max-width: 700px;
+    background-image: url('letter.jpg') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    border: none !important;
+    border-radius: 20px;
+    padding: 6rem 2.5rem 6rem;
+    max-width: 800px;
     width: 92%;
-    height: auto;
-    max-height: 85vh;
-    overflow-y: auto;
-    text-align: center;
+    margin: 4rem auto; /* Vertical margin ensures scrollable space at bottom */
     position: relative;
-    box-shadow: 
-        0 40px 100px rgba(0, 0, 0, 0.6), 
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    transform: scale(0.95) translateY(30px);
-    transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.7s ease;
-    scrollbar-width: thin;
-    scrollbar-color: var(--accent-color) transparent;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
+    transform: translateY(30px);
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.2, 0, 0.2, 1);
+    height: auto;
+    min-height: 500px;
+    text-align: center;
 }
 
 .note-modal-content::-webkit-scrollbar {
@@ -1722,9 +1724,9 @@ section {
     position: fixed;
     top: 2.5rem;
     right: 2.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(232, 139, 155, 0.4);
-    color: var(--accent-color);
+    background: rgba(232, 139, 155, 0.1);
+    border: 1px solid rgba(232, 139, 155, 0.3);
+    color: #e88b9b;
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -1776,7 +1778,7 @@ section {
     position: absolute;
     top: -60px; left: 50%; transform: translateX(-50%);
     width: 300px; height: 300px;
-    background: radial-gradient(circle, rgba(232,139,155,0.12) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(232,139,155,0.2) 0%, transparent 70%);
     pointer-events: none;
     animation: noteGlow 4s ease-in-out infinite alternate;
 }
@@ -1790,18 +1792,21 @@ section {
     font-family: var(--font-body);
     font-size: 0.7rem;
     letter-spacing: 5px;
-    color: rgba(232,139,155,0.5);
+    color: rgba(232, 139, 155, 0.8);
     text-transform: uppercase;
     margin-bottom: 2rem;
     position: relative;
+    font-weight: 500;
 }
 
 .note-text {
-    font-family: 'Dancing Script', cursive;
-    font-size: clamp(1.15rem, 2.5vw, 1.4rem);
-    color: rgba(240,230,228,0.85);
-    line-height: 1.9;
+    font-family: 'Great Vibes', cursive !important;
+    font-size: clamp(1.4rem, 3.5vw, 2.3rem) !important;
+    color: #1a1a1a !important; /* Force black text */
+    line-height: 1.6;
     position: relative;
+    font-weight: 400;
+    margin-bottom: 2rem;
 }
 
 .note-signature {
@@ -1809,7 +1814,7 @@ section {
     font-family: var(--font-heading);
     font-style: italic;
     font-size: 1.1rem;
-    color: var(--accent-color);
+    color: #d46b7a; /* Darker pink for better visibility on white */
     position: relative;
 }
 
@@ -1906,7 +1911,7 @@ section {
 .cute-btn {
     background: rgba(232, 139, 155, 0.1);
     border: 1px solid rgba(232, 139, 155, 0.3);
-    padding: 1.2rem 2.8rem;
+    padding: 0.8rem 2.2rem;
     border-radius: 50px;
     color: #fff;
     font-family: var(--font-body);
@@ -1918,6 +1923,56 @@ section {
     overflow: hidden;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(10px);
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.letter-box-btn {
+    padding: 0 !important;
+    width: 80px;
+    height: 80px;
+    justify-content: center;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(232, 139, 155, 0.4) !important;
+    box-shadow: 0 10px 30px rgba(232, 139, 155, 0.2);
+}
+
+.letter-box-btn .btn-logo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border: none;
+    box-shadow: none;
+    object-fit: cover; /* Fill the circle */
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.letter-box-btn:hover .btn-logo {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Custom Scrollbar for Modal */
+.utkarsh-note::-webkit-scrollbar {
+    width: 8px;
+}
+
+.utkarsh-note::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.utkarsh-note::-webkit-scrollbar-thumb {
+    background: rgba(232, 139, 155, 0.4);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.utkarsh-note::-webkit-scrollbar-thumb:hover {
+    background: rgba(232, 139, 155, 0.8);
+    background-clip: content-box;
 }
 
 .cute-btn:hover {
@@ -2341,3 +2396,4 @@ section {
         margin-top: 1.5rem;
     }
 }
+

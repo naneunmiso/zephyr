@@ -113,20 +113,6 @@
                     <div class="swiper bts-swiper">
                         <div class="swiper-wrapper">
 
-                            <!-- RM -->
-                            <div class="swiper-slide bts-slide">
-                                <div class="slide-image-container">
-                                    <div class="slide-bg-blur" style="background-image: url('/7/wisdom.png')"></div>
-                                    <img src="/7/wisdom.png" class="slide-bg" alt="RM">
-                                    <div class="slide-overlay"></div>
-                                </div>
-                                <div class="slide-content">
-                                    <span class="member-tag">NAMJOON · 남준</span>
-                                    <h3>The Wisdom</h3>
-                                    <p>You are Namjoon because of the way you look at the world—with a depth that most people can't even perceive. You anchor my world with a quiet wisdom that I never want to live without.</p>
-                                </div>
-                            </div>
-
                             <!-- JIN -->
                             <div class="swiper-slide bts-slide">
                                 <div class="slide-image-container">
@@ -136,8 +122,22 @@
                                 </div>
                                 <div class="slide-content">
                                     <span class="member-tag">SEOKJIN · 석진</span>
-                                    <h3>The Elegance</h3>
-                                    <p>You are Seokjin because you carry an effortless grace that makes life look beautiful even when it's messy. You are the warmth of a home I never want to leave.</p>
+                                    <h3>The Home</h3>
+                                    <p>You are Jin. Not because you smile the brightest, but because your presence feels like home after a long day. There is comfort in you that words cannot properly explain. You make silence feel safe.</p>
+                                </div>
+                            </div>
+
+                            <!-- RM -->
+                            <div class="swiper-slide bts-slide">
+                                <div class="slide-image-container">
+                                    <div class="slide-bg-blur" style="background-image: url('/7/wisdom.png')"></div>
+                                    <img src="/7/wisdom.png" class="slide-bg" alt="RM">
+                                    <div class="slide-overlay"></div>
+                                </div>
+                                <div class="slide-content">
+                                    <span class="member-tag">NAMJOON · 남준</span>
+                                    <h3>The Galaxy</h3>
+                                    <p>You are RM. A mind full of galaxies no one completely understands. You think deeply, feel deeply, love deeply—even when you pretend not to. You carry storms inside you yet still become peace for others.</p>
                                 </div>
                             </div>
 
@@ -150,8 +150,8 @@
                                 </div>
                                 <div class="slide-content">
                                     <span class="member-tag">YOONGI · 윤기</span>
-                                    <h3>The Resilience</h3>
-                                    <p>You are Yoongi because of your quiet, unwavering strength. Your silence is a shield and your presence is a comfort that speaks for itself in the loudest rooms.</p>
+                                    <h3>The Courage</h3>
+                                    <p>You are SUGA. Soft pain wrapped inside calm eyes. You don’t always say when you’re hurting, but somehow you still choose kindness. You make sadness feel human instead of ugly.</p>
                                 </div>
                             </div>
 
@@ -164,8 +164,8 @@
                                 </div>
                                 <div class="slide-content">
                                     <span class="member-tag">HOSEOK · 호석</span>
-                                    <h3>The Hope</h3>
-                                    <p>You are Hoseok because you are the sun even on my cloudiest days. You don't just bring light; you *are* the light. You make everything feel okay again.</p>
+                                    <h3>The Sunlight</h3>
+                                    <p>You are J-Hope. A little sunlight disguised as a person. Some people carry light loudly — you carry it gently. Like warm mornings after sleepless nights.</p>
                                 </div>
                             </div>
 
@@ -178,8 +178,8 @@
                                 </div>
                                 <div class="slide-content">
                                     <span class="member-tag">JIMIN · 지민</span>
-                                    <h3>The Purest Love</h3>
-                                    <p>You are Jimin because of the way you love—so deeply, so selflessly. You heal with a word, and your heart is a safe haven for everyone lucky enough to know you.</p>
+                                    <h3>The Tenderness</h3>
+                                    <p>You are Jimin. Made of tenderness and emotions too beautiful for this world. There’s something painfully beautiful about the way you love people. Like you give pieces of your soul without asking for anything back.</p>
                                 </div>
                             </div>
 
@@ -192,8 +192,8 @@
                                 </div>
                                 <div class="slide-content">
                                     <span class="member-tag">TAEHYUNG · 태형</span>
-                                    <h3>The Rare Soul</h3>
-                                    <p>You are Taehyung because you are a rare, beautiful mystery. You see magic in the things everyone else walks past, making life feel like a work of art.</p>
+                                    <h3>The Art</h3>
+                                    <p>You are Taehyung. Art in human form. You feel like old songs, rainy evenings, unfinished poems, and memories that ache softly forever. There’s mystery in your smile and entire stories hidden behind your eyes.</p>
                                 </div>
                             </div>
 
@@ -206,8 +206,8 @@
                                 </div>
                                 <div class="slide-content">
                                     <span class="member-tag">JUNGKOOK · 정국</span>
-                                    <h3>The Heart</h3>
-                                    <p>You are Jungkook because you are the beating heart of everything. You are constant growth and pure passion. You are my 'Still With You' forever.</p>
+                                    <h3>The Evolution</h3>
+                                    <p>You are Jungkook. A soul constantly growing, endlessly becoming. You keep evolving while remaining soft at heart. You inspire without trying to.</p>
                                 </div>
                             </div>
 
@@ -222,23 +222,52 @@
 
                 <!-- Toggle button for the note -->
                 <div class="note-toggle-wrapper reveal-item">
-                    <button id="open-note-btn" class="cute-btn">
-                        <span>Read My Heart</span>
+                    <button id="open-note-btn" class="cute-btn letter-box-btn">
+                        <img src="letterlogo.jpg" alt="Letter Logo" class="btn-logo">
                         <div class="btn-bubble"></div>
                     </button>
                 </div>
 
                 <!-- The personal love note (popup modal) -->
-                <div class="utkarsh-note" id="personal-note">
+                <div class="utkarsh-note" id="personal-note" data-lenis-prevent>
                     <div class="note-modal-content">
                         <button class="modal-close-btn" id="close-note-btn" aria-label="Close letter"></button>
                         <div class="note-glow"></div>
                         <p class="note-from">— A voice from the stars —</p>
                         <p class="note-text">
-                            "Muskan, I built this for you. Not because it's your birthday, but because you deserve to be celebrated — every single day. You are my favourite person in this whole universe. I can't imagine a version of my life without you in it. So here's this — imperfect but full of love — because you matter more than words could ever say.
-                            <br><br>Happy Birthday, my serendipity. 🌸"
+                            Hey Muskan,
+                            <br><br>
+                            I think some people enter life like ordinary names, and then slowly become feelings. You became one.
+                            <br><br>
+                            Maybe that’s why whenever I think of BTS, I end up thinking of you too — because you carry pieces of all seven souls within yourself.
+                            <br><br>
+                            <b>You are Jin.</b> Not because you smile the brightest, but because your presence feels like home after a long day. There is comfort in you that words cannot properly explain. You make silence feel safe. And I hope one day you truly understand this — that your insecurities never made you less beautiful.
+                            <br><br>
+                            <b>You are RM.</b> A mind full of galaxies no one completely understands. You think deeply, feel deeply, love deeply — even when you pretend not to. There’s poetry hidden in the way you see the world. You carry storms inside you yet still become peace for others.
+                            <br><br>
+                            <b>You are SUGA.</b> Soft pain wrapped inside calm eyes. The kind of person who survives quietly. You don’t always say when you’re hurting, but somehow you still choose kindness. And I think that is one of the purest forms of courage. You make sadness feel human instead of ugly.
+                            <br><br>
+                            <b>You are J-Hope.</b> A little sunlight disguised as a person. You probably don’t even realize how many bad days you’ve unknowingly healed just by existing. Some people carry light loudly — you carry it gently. Like warm mornings after sleepless nights.
+                            <br><br>
+                            <b>You are Jimin.</b> Made of tenderness and emotions too beautiful for this world. You feel things with your whole heart. Even your smallest acts of care stay in people’s memories longer than you think. There’s something painfully beautiful about the way you love people.
+                            <br><br>
+                            <b>You are Taehyung.</b> Art in human form. The kind of person people remember years later without understanding why. There’s mystery in your smile, music in your silence, and entire stories hidden behind your eyes. You feel like old songs, rainy evenings, unfinished poems, and memories that ache softly forever.
+                            <br><br>
+                            <b>And you are Jungkook.</b> A soul constantly growing, endlessly becoming. You don’t even realize how special you are while trying to become “better.” But maybe that’s the beauty of you — you keep evolving while remaining soft at heart.
+                            <br><br>
+                            Muskan, if BTS taught people that seven different souls could create one beautiful universe together… then maybe you taught me that one person alone can feel like an entire universe.
+                            <br><br>
+                            And maybe I’ll never have the perfect words to explain what you mean to me. But if I could wish for one thing on your birthday, it would be this:
+                            <br><br>
+                            May you always see yourself the way people who love you see you. Not as someone ordinary, not as someone difficult to love, not as someone “not enough.” But as someone warm enough to feel like home, soft enough to heal hearts, and beautiful enough to leave permanent traces in people’s lives.
+                            <br><br>
+                            Happy Birthday, Muskan. 🌙
+                            <br>
+                            Some people become memories.
+                            <br>
+                            You became poetry.
                         </p>
-                        <p class="note-signature">With all my heart, A soul who keeps you in their prayers ♡</p>
+                        <p class="note-signature">Forever Yours, Your Constellation ♡</p>
                         
                         <!-- AI Generated Magic Cake -->
                         <div class="ai-magic-cake" id="magic-cake-btn" title="Tap to blow the candle">🎂</div>
