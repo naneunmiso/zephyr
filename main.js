@@ -1,3 +1,17 @@
+// ── Clover Preloader Animation ───────────────────────────────────────────────
+window.addEventListener('load', () => {
+    const preloader = document.getElementById('clover-preloader');
+    if (preloader) {
+        // Wait just a moment to let the user see the clover before scattering
+        setTimeout(() => {
+            // Trigger the scatter animation
+            preloader.classList.add('scatter');
+            // Trigger the background fade-out
+            preloader.classList.add('hide');
+        }, 800);
+    }
+});
+
 // Initialize Lenis Smooth Scroll
 const lenis = new Lenis({
     duration: 1.2,
@@ -699,34 +713,143 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // Note Modal Logic
-    const noteBtn = document.getElementById('open-note-btn');
-    const personalNote = document.getElementById('personal-note');
-    const closeNoteBtn = document.getElementById('close-note-btn');
+    // ── Letter Passcode Gate ─────────────────────────────────────────────────
+    (function initLetterPasscode() {
+        const noteBtn       = document.getElementById('open-note-btn');
+        const personalNote  = document.getElementById('personal-note');
+        const closeNoteBtn  = document.getElementById('close-note-btn');
+        const overlay       = document.getElementById('letter-passcode-overlay');
+        const card          = document.getElementById('lpo-card');
+        const digitEls      = Array.from(document.querySelectorAll('.lpo-digit'));
+        const errorEl       = document.getElementById('lpo-error');
+        const unlockBtn     = document.getElementById('lpo-btn');
+        const cancelBtn     = document.getElementById('lpo-cancel');
+        const successEl     = document.getElementById('lpo-success');
+        const CORRECT       = '250604';
 
-    if (noteBtn && personalNote) {
-        noteBtn.addEventListener('click', () => {
-            personalNote.classList.add('show');
-            document.body.classList.add('letter-open'); // Add class to hide navbar
-            document.body.style.overflow = 'hidden'; // lock scroll
-            if (window.lenis) window.lenis.stop(); // Stop Lenis
-            
-            // GSAP animate in
-            gsap.fromTo('.note-modal-content', 
-                { y: 50, opacity: 0 }, 
-                { y: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.1 }
-            );
-        });
-    }
+        if (!overlay || !noteBtn) return;
 
-    if (closeNoteBtn && personalNote) {
-        closeNoteBtn.addEventListener('click', () => {
-            personalNote.classList.remove('show');
-            document.body.classList.remove('letter-open'); // Remove class to show navbar
-            document.body.style.overflow = ''; // unlock scroll
-            if (window.lenis) window.lenis.start(); // Start Lenis
+        // --- spawn pink sparkle particles once ---
+        const sparkleColors = ['#ffb3c6','#ffd6e0','#ffafc7','#f9c9d4','#fce4ec','#ff8fab'];
+        for (let i = 0; i < 30; i++) {
+            const s = document.createElement('div');
+            s.className = 'lpo-star';
+            const color = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+            s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${2+Math.random()*4}s;animation-delay:${Math.random()*4}s;width:${Math.random()<.3?6:4}px;height:${Math.random()<.3?6:4}px;background:${color};`;
+            overlay.appendChild(s);
+        }
+
+        // --- open overlay ---
+        function openOverlay() {
+            resetDigits();
+            overlay.classList.add('lpo-show');
+            overlay.classList.remove('lpo-exit');
+            setTimeout(() => digitEls[0] && digitEls[0].focus(), 400);
+        }
+
+        // --- close overlay ---
+        function closeOverlay() {
+            overlay.classList.remove('lpo-show');
+            resetDigits();
+        }
+
+        // --- reset state ---
+        function resetDigits() {
+            digitEls.forEach(d => { d.value = ''; d.classList.remove('filled','lpo-err'); });
+            errorEl.classList.remove('show');
+            unlockBtn.disabled = false;
+            successEl.classList.remove('show');
+        }
+
+        // --- digit wire-up ---
+        digitEls.forEach((el, i) => {
+            el.addEventListener('input', () => {
+                const v = el.value.replace(/\D/g, '');
+                el.value = v.slice(-1);
+                if (el.value) {
+                    el.classList.add('filled');
+                    if (i < 5) digitEls[i+1].focus();
+                    else checkCode();
+                } else {
+                    el.classList.remove('filled');
+                }
+            });
+            el.addEventListener('keydown', e => {
+                if (e.key === 'Backspace' && !el.value && i > 0) {
+                    digitEls[i-1].value = '';
+                    digitEls[i-1].classList.remove('filled');
+                    digitEls[i-1].focus();
+                }
+                if (e.key === 'Enter') checkCode();
+                if (e.key === 'Escape') closeOverlay();
+            });
+            el.addEventListener('paste', e => {
+                e.preventDefault();
+                const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+                paste.split('').forEach((ch, idx) => {
+                    if (digitEls[idx]) { digitEls[idx].value = ch; digitEls[idx].classList.add('filled'); }
+                });
+                digitEls[Math.min(paste.length, 5)].focus();
+            });
         });
-    }
+
+        // --- check ---
+        function checkCode() {
+            const entered = digitEls.map(d => d.value).join('');
+            if (entered.length < 6) return;
+            if (entered === CORRECT) {
+                unlockSuccess();
+            } else {
+                wrongCode();
+            }
+        }
+
+        function wrongCode() {
+            card.classList.add('lpo-shake');
+            digitEls.forEach(d => d.classList.add('lpo-err'));
+            errorEl.classList.add('show');
+            setTimeout(() => {
+                card.classList.remove('lpo-shake');
+                digitEls.forEach(d => { d.value=''; d.classList.remove('filled','lpo-err'); });
+                digitEls[0].focus();
+                setTimeout(() => errorEl.classList.remove('show'), 2000);
+            }, 600);
+        }
+
+        function unlockSuccess() {
+            unlockBtn.disabled = true;
+            successEl.classList.add('show');
+            overlay.classList.add('lpo-exit');
+            setTimeout(() => {
+                overlay.classList.remove('lpo-show','lpo-exit');
+                resetDigits();
+                // open the actual letter
+                personalNote.classList.add('show');
+                document.body.classList.add('letter-open');
+                document.body.style.overflow = 'hidden';
+                if (window.lenis) window.lenis.stop();
+                gsap.fromTo('.note-modal-content',
+                    { y: 50, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.1 }
+                );
+            }, 2100);
+        }
+
+        // --- button listeners ---
+        if (noteBtn)    noteBtn.addEventListener('click', openOverlay);
+        if (unlockBtn)  unlockBtn.addEventListener('click', checkCode);
+        if (cancelBtn)  cancelBtn.addEventListener('click', closeOverlay);
+
+        // close letter
+        if (closeNoteBtn && personalNote) {
+            closeNoteBtn.addEventListener('click', () => {
+                personalNote.classList.remove('show');
+                document.body.classList.remove('letter-open');
+                document.body.style.overflow = '';
+                if (window.lenis) window.lenis.start();
+            });
+        }
+    })();
 
     // AI Magic Cake Blow Effect
     const magicCakeBtn = document.getElementById('magic-cake-btn');
@@ -785,31 +908,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// Magnetic Effect for Navbar Links
+// Magnetic Effect for Navbar Links — desktop only
+if (window.innerWidth > 768) {
 const navLinks = document.querySelectorAll('.nav-links a');
 navLinks.forEach(link => {
     link.addEventListener('mousemove', (e) => {
         const rect = link.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
-        
-        gsap.to(link, {
-            x: x * 0.3,
-            y: y * 0.3,
-            duration: 0.3,
-            ease: "power2.out"
-        });
+        gsap.to(link, { x: x * 0.3, y: y * 0.3, duration: 0.3, ease: "power2.out" });
     });
-    
     link.addEventListener('mouseleave', () => {
-        gsap.to(link, {
-            x: 0,
-            y: 0,
-            duration: 0.5,
-            ease: "elastic.out(1, 0.3)"
-        });
+        gsap.to(link, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
     });
 });
+}
 
 // ─── Mobile-Safe Video Player ─────────────────────────────────────────────
 // iOS/Android block programmatic unmuting without a direct user gesture.

@@ -6,50 +6,412 @@
   <title>22 Letters for 22 Years | Muskan's Birthday</title>
   <link rel="stylesheet" href="../src/dashboard.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── PASSCODE OVERLAY ── */
+    #passcode-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at 30% 40%, #1a0a2e 0%, #0d0015 50%, #000008 100%);
+      overflow: hidden;
+    }
+
+    /* floating orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: orbFloat linear infinite;
+      pointer-events: none;
+    }
+    .orb1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(180,80,220,0.25), transparent 70%); top: -100px; left: -150px; animation-duration: 20s; }
+    .orb2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(80,120,255,0.2), transparent 70%); bottom: -80px; right: -100px; animation-duration: 25s; animation-direction: reverse; }
+    .orb3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,100,180,0.15), transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); animation-duration: 18s; }
+
+    @keyframes orbFloat {
+      0%   { transform: translate(0, 0) scale(1); }
+      33%  { transform: translate(40px, -30px) scale(1.05); }
+      66%  { transform: translate(-20px, 20px) scale(0.95); }
+      100% { transform: translate(0, 0) scale(1); }
+    }
+
+    /* star particles */
+    .star {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.1; transform: scale(1); }
+      50%       { opacity: 0.9; transform: scale(1.6); }
+    }
+
+    /* card */
+    .pc-card {
+      position: relative;
+      z-index: 10;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-radius: 28px;
+      padding: 3rem 2.5rem 2.5rem;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 80px rgba(160,60,220,0.2), 0 30px 60px rgba(0,0,0,0.5);
+      animation: cardEntrance 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    }
+    @keyframes cardEntrance {
+      from { opacity: 0; transform: translateY(40px) scale(0.9); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .pc-icon {
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+      animation: iconPulse 3s ease-in-out infinite;
+    }
+    @keyframes iconPulse {
+      0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 8px rgba(255,150,200,0.4)); }
+      50%       { transform: scale(1.1) rotate(5deg); filter: drop-shadow(0 0 16px rgba(255,150,200,0.8)); }
+    }
+
+    .pc-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      font-style: italic;
+      color: #f0e6e4;
+      margin: 0 0 0.4rem;
+      line-height: 1.2;
+    }
+    .pc-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 300;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(240,200,220,0.5);
+      margin-bottom: 2.2rem;
+    }
+
+    /* digit inputs */
+    .pc-digits {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 1.6rem;
+    }
+    .pc-digit {
+      width: 48px; height: 58px;
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      color: #f0e6e4;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      text-align: center;
+      outline: none;
+      caret-color: #e08cd4;
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s, transform 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .pc-digit:focus {
+      border-color: rgba(200,100,230,0.7);
+      background: rgba(200,100,230,0.1);
+      box-shadow: 0 0 0 3px rgba(200,100,230,0.2), 0 0 20px rgba(200,100,230,0.15);
+      transform: translateY(-2px) scale(1.05);
+    }
+    .pc-digit.filled {
+      border-color: rgba(230,150,255,0.5);
+      background: rgba(200,100,230,0.12);
+    }
+
+    /* shake on wrong */
+    .shake {
+      animation: shake 0.5s cubic-bezier(0.36,0.07,0.19,0.97) forwards;
+    }
+    @keyframes shake {
+      10%, 90% { transform: translateX(-4px); }
+      20%, 80% { transform: translateX(6px); }
+      30%, 50%, 70% { transform: translateX(-6px); }
+      40%, 60% { transform: translateX(6px); }
+    }
+
+    /* error text */
+    .pc-error {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      color: #ff7b9c;
+      text-transform: uppercase;
+      min-height: 1.2rem;
+      margin-bottom: 0.8rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .pc-error.show { opacity: 1; }
+
+    /* unlock button */
+    .pc-btn {
+      width: 100%;
+      padding: 0.9rem;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #a040c8, #5060e8);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.25s, transform 0.2s, box-shadow 0.25s;
+      box-shadow: 0 8px 30px rgba(140,60,220,0.4);
+    }
+    .pc-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(140,60,220,0.55); }
+    .pc-btn:active { transform: translateY(0); }
+    .pc-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+    /* success state */
+    .pc-success-msg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.04);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    .pc-success-msg.show { opacity: 1; pointer-events: all; }
+    .pc-success-icon { font-size: 3.5rem; animation: successPop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+    @keyframes successPop {
+      from { transform: scale(0) rotate(-30deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    .pc-success-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      color: #f0e6e4;
+      margin-top: 1rem;
+      animation: fadeUp 0.6s 0.3s both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* overlay exit */
+    #passcode-overlay.unlocking {
+      animation: overlayExit 0.9s 1.4s cubic-bezier(0.7,0,1,1) forwards;
+    }
+    @keyframes overlayExit {
+      0%   { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.08); pointer-events: none; }
+    }
+
+    /* hide page content until unlocked */
+    #page-content { opacity: 0; transition: opacity 0.6s ease; }
+    #page-content.visible { opacity: 1; }
+  </style>
 </head>
 <body>
 
-  <a href="../dashboard/index.html" class="back-btn">← Dashboard</a>
+  <!-- ── PASSCODE OVERLAY ── -->
+  <div id="passcode-overlay">
+    <!-- orbs -->
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
 
-  <div class="page-hero">
-    <p class="page-eyebrow">LETTERS TO HER SOUL</p>
-    <h1 class="page-title">22 <span>Letters</span></h1>
-    <div class="page-line"></div>
+    <!-- card -->
+    <div class="pc-card" id="pc-card">
+      <div class="pc-icon">💌</div>
+      <h2 class="pc-title">Secret Letters</h2>
+      <p class="pc-subtitle">Enter your passcode to unlock</p>
+
+      <div class="pc-digits" id="pc-digits">
+        <input class="pc-digit" type="tel" maxlength="1" id="d0" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+        <input class="pc-digit" type="tel" maxlength="1" id="d1" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+        <input class="pc-digit" type="tel" maxlength="1" id="d2" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+        <input class="pc-digit" type="tel" maxlength="1" id="d3" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+        <input class="pc-digit" type="tel" maxlength="1" id="d4" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+        <input class="pc-digit" type="tel" maxlength="1" id="d5" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+      </div>
+
+      <p class="pc-error" id="pc-error">Incorrect passcode — try again</p>
+
+      <button class="pc-btn" id="pc-btn" onclick="checkPasscode()">Unlock ✦</button>
+
+      <!-- success overlay inside card -->
+      <div class="pc-success-msg" id="pc-success">
+        <span class="pc-success-icon">🌸</span>
+        <p class="pc-success-text">Opening your letters…</p>
+      </div>
+    </div>
   </div>
 
-  <div class="page-content">
-    <div class="letters-wrap">
-      <div class="swiper letters-swiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>You arrived in 2004 like a quiet revolution nobody saw coming.</p></div><div class="letter-number">✦ 01 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>At two, you already had opinions. Strong ones. Nothing has changed.</p></div><div class="letter-number">✦ 02 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>By three, the world learned your laughter is louder than your silence — both are magic.</p></div><div class="letter-number">✦ 03 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>At four you chased butterflies. Now butterflies chase you.</p></div><div class="letter-number">✦ 04 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>Five years old and already the most interesting person in any room.</p></div><div class="letter-number">✦ 05 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>They say six is when children become themselves. You were already you.</p></div><div class="letter-number">✦ 06 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>Seven: you discovered that stories are portals. You never really came back.</p></div><div class="letter-number">✦ 07 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>At eight, you learned that kindness is not weakness. It is the rarest kind of strength.</p></div><div class="letter-number">✦ 08 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>Nine candles and you already understood that some feelings live beyond words.</p></div><div class="letter-number">✦ 09 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>A decade of you. The world is richer for every single day.</p></div><div class="letter-number">✦ 10 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>Eleven: you started noticing the beauty in things everyone else overlooked.</p></div><div class="letter-number">✦ 11 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>Twelve felt like the last chapter of childhood. You made it legendary.</p></div><div class="letter-number">✦ 12 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>Thirteen: the world got complicated. You got more interesting.</p></div><div class="letter-number">✦ 13 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>At fourteen you discovered your voice. The universe leaned in to listen.</p></div><div class="letter-number">✦ 14 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>Fifteen brought turbulence. You danced through it anyway.</p></div><div class="letter-number">✦ 15 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>At sixteen you understood that some things are worth feeling deeply — and you felt everything.</p></div><div class="letter-number">✦ 16 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>Seventeen: nunchi — the art of reading a room. You mastered it without ever being taught.</p></div><div class="letter-number">✦ 17 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>Eighteen felt like freedom. You chose carefully which doors to open.</p></div><div class="letter-number">✦ 18 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>Nineteen: jeong — that quiet love that forms without asking permission. You give it freely.</p></div><div class="letter-number">✦ 19 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>At twenty, your ikigai revealed itself: to exist fully, love fiercely, live beautifully.</p></div><div class="letter-number">✦ 20 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>Twenty-one: ma — the Japanese art of meaningful pause. You know when to be still.</p></div><div class="letter-number">✦ 21 / 22</div></div>
-          <div class="swiper-slide letter-card"><div class="letter-content"><p>Twenty-two. This is not an ending. This is the most beautiful beginning of everything you are.</p></div><div class="letter-number">✦ 22 / 22</div></div>
+  <!-- ── PAGE CONTENT ── -->
+  <div id="page-content">
+    <a href="../dashboard/index.html" class="back-btn">← Dashboard</a>
+
+    <div class="page-hero">
+      <p class="page-eyebrow">LETTERS TO HER SOUL</p>
+      <h1 class="page-title">22 <span>Letters</span></h1>
+      <div class="page-line"></div>
+    </div>
+
+    <div class="page-content">
+      <div class="letters-wrap">
+        <div class="swiper letters-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>You arrived in 2004 like a quiet revolution nobody saw coming.</p></div><div class="letter-number">✦ 01 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>At two, you already had opinions. Strong ones. Nothing has changed.</p></div><div class="letter-number">✦ 02 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>By three, the world learned your laughter is louder than your silence — both are magic.</p></div><div class="letter-number">✦ 03 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>At four you chased butterflies. Now butterflies chase you.</p></div><div class="letter-number">✦ 04 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>Five years old and already the most interesting person in any room.</p></div><div class="letter-number">✦ 05 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>They say six is when children become themselves. You were already you.</p></div><div class="letter-number">✦ 06 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>Seven: you discovered that stories are portals. You never really came back.</p></div><div class="letter-number">✦ 07 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>At eight, you learned that kindness is not weakness. It is the rarest kind of strength.</p></div><div class="letter-number">✦ 08 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>Nine candles and you already understood that some feelings live beyond words.</p></div><div class="letter-number">✦ 09 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>A decade of you. The world is richer for every single day.</p></div><div class="letter-number">✦ 10 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>Eleven: you started noticing the beauty in things everyone else overlooked.</p></div><div class="letter-number">✦ 11 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>Twelve felt like the last chapter of childhood. You made it legendary.</p></div><div class="letter-number">✦ 12 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>Thirteen: the world got complicated. You got more interesting.</p></div><div class="letter-number">✦ 13 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>At fourteen you discovered your voice. The universe leaned in to listen.</p></div><div class="letter-number">✦ 14 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>Fifteen brought turbulence. You danced through it anyway.</p></div><div class="letter-number">✦ 15 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>At sixteen you understood that some things are worth feeling deeply — and you felt everything.</p></div><div class="letter-number">✦ 16 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>Seventeen: nunchi — the art of reading a room. You mastered it without ever being taught.</p></div><div class="letter-number">✦ 17 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>Eighteen felt like freedom. You chose carefully which doors to open.</p></div><div class="letter-number">✦ 18 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>Nineteen: jeong — that quiet love that forms without asking permission. You give it freely.</p></div><div class="letter-number">✦ 19 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>At twenty, your ikigai revealed itself: to exist fully, love fiercely, live beautifully.</p></div><div class="letter-number">✦ 20 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>Twenty-one: ma — the Japanese art of meaningful pause. You know when to be still.</p></div><div class="letter-number">✦ 21 / 22</div></div>
+            <div class="swiper-slide letter-card"><div class="letter-content"><p>Twenty-two. This is not an ending. This is the most beautiful beginning of everything you are.</p></div><div class="letter-number">✦ 22 / 22</div></div>
+          </div>
         </div>
+        <p style="color:rgba(240,230,228,0.3);font-size:0.8rem;letter-spacing:2px;margin-top:1rem;">SWIPE TO READ · 22 LETTERS</p>
       </div>
-      <p style="color:rgba(240,230,228,0.3);font-size:0.8rem;letter-spacing:2px;margin-top:1rem;">SWIPE TO READ · 22 LETTERS</p>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <script>
+    /* ── Star particles ── */
+    const overlay = document.getElementById('passcode-overlay');
+    for (let i = 0; i < 60; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.style.cssText = `
+        left:${Math.random()*100}%;
+        top:${Math.random()*100}%;
+        animation-duration:${2+Math.random()*4}s;
+        animation-delay:${Math.random()*4}s;
+        width:${Math.random()<0.3?3:2}px;
+        height:${Math.random()<0.3?3:2}px;
+        opacity:${0.1+Math.random()*0.4};
+      `;
+      overlay.appendChild(s);
+    }
+
+    /* ── Digit inputs ── */
+    const digits = Array.from(document.querySelectorAll('.pc-digit'));
+    const CORRECT = '250604';
+
+    digits.forEach((el, i) => {
+      el.addEventListener('input', () => {
+        const v = el.value.replace(/\D/g,'');
+        el.value = v.slice(-1);
+        if (el.value) {
+          el.classList.add('filled');
+          if (i < 5) digits[i+1].focus();
+          else checkPasscode();
+        } else {
+          el.classList.remove('filled');
+        }
+      });
+
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Backspace' && !el.value && i > 0) {
+          digits[i-1].value = '';
+          digits[i-1].classList.remove('filled');
+          digits[i-1].focus();
+        }
+        if (e.key === 'Enter') checkPasscode();
+      });
+
+      el.addEventListener('paste', e => {
+        e.preventDefault();
+        const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+        paste.split('').forEach((ch, idx) => {
+          if (digits[idx]) { digits[idx].value = ch; digits[idx].classList.add('filled'); }
+        });
+        const next = Math.min(paste.length, 5);
+        digits[next].focus();
+      });
+    });
+
+    /* Auto-focus first digit */
+    setTimeout(() => digits[0].focus(), 600);
+
+    /* ── Check passcode ── */
+    function checkPasscode() {
+      const entered = digits.map(d => d.value).join('');
+      if (entered.length < 6) return;
+
+      if (entered === CORRECT) {
+        unlock();
+      } else {
+        wrong();
+      }
+    }
+    window.checkPasscode = checkPasscode;
+
+    function wrong() {
+      const card = document.getElementById('pc-card');
+      const err  = document.getElementById('pc-error');
+      card.classList.add('shake');
+      err.classList.add('show');
+      digits.forEach(d => {
+        d.style.borderColor = 'rgba(255,80,100,0.7)';
+        d.style.background  = 'rgba(255,80,100,0.1)';
+      });
+      setTimeout(() => {
+        card.classList.remove('shake');
+        digits.forEach(d => { d.value=''; d.classList.remove('filled'); d.style.borderColor=''; d.style.background=''; });
+        digits[0].focus();
+        setTimeout(() => err.classList.remove('show'), 2000);
+      }, 600);
+    }
+
+    function unlock() {
+      document.getElementById('pc-btn').disabled = true;
+      const success = document.getElementById('pc-success');
+      success.classList.add('show');
+      overlay.classList.add('unlocking');
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        document.getElementById('page-content').classList.add('visible');
+      }, 2400);
+    }
+  </script>
+
   <script type="module">
     import { initSakura, initLetters, initPageTransitions } from '../src/dashboard.js';
     initSakura();
