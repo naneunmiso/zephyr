@@ -1079,7 +1079,7 @@
       { type: 'write', src: '/letter/letter pages (1).pdf', page: 1, key: 'lp5', label: 'Page 5', ph: '' },
       { type: 'write', src: '/letter/letter pages (1).pdf', page: 1, key: 'lp6', label: 'Page 6', ph: '' },
       { type: 'write', src: '/letter/letter pages (1).pdf', page: 1, key: 'lp7', label: 'Page 7', ph: '' },
-      { type: 'write', src: '/letter/letter pages (1).pdf', page: 1, key: 'lp8', label: 'Page 8', ph: "i don't know what to write just happy birthday >3" },
+      { type: 'write', src: '/letter/letter pages (1).pdf', page: 1, key: 'lp8_v2', label: 'Page 8', ph: "i don't know what to write just happy birthday >3" },
       {
         type: 'collage', src: '/letter/Beige Doodle Fun Fashion Magazine Cover (1).pdf', label: 'Page 9',
         photos: [
@@ -1127,7 +1127,7 @@
           ta.dataset.k = p.key;
           let saved = localStorage.getItem(p.key);
           if (!saved || saved.trim() === "" || saved.includes("i don't know what to write just happy birthday >3")) {
-            if (p.key === 'lp8') {
+            if (p.key === 'lp8_v2') {
               saved = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ni don't know what to write just happy birthday >3";
               localStorage.setItem(p.key, saved);
             } else {

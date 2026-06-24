@@ -722,132 +722,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // ── Letter Passcode Gate ─────────────────────────────────────────────────
+    // ── Letter Passcode Gate — Removed (Direct Open) ─────────────────────────
     (function initLetterPasscode() {
         const noteBtn       = document.getElementById('open-note-btn');
         const personalNote  = document.getElementById('personal-note');
         const closeNoteBtn  = document.getElementById('close-note-btn');
-        const overlay       = document.getElementById('letter-passcode-overlay');
-        const card          = document.getElementById('lpo-card');
-        const digitEls      = Array.from(document.querySelectorAll('.lpo-digit'));
-        const errorEl       = document.getElementById('lpo-error');
-        const unlockBtn     = document.getElementById('lpo-btn');
-        const cancelBtn     = document.getElementById('lpo-cancel');
-        const successEl     = document.getElementById('lpo-success');
-        const CORRECT       = '250604';
 
-        if (!overlay || !noteBtn) return;
+        if (!personalNote || !noteBtn) return;
 
-        // --- spawn pink sparkle particles once ---
-        const sparkleColors = ['#ffb3c6','#ffd6e0','#ffafc7','#f9c9d4','#fce4ec','#ff8fab'];
-        for (let i = 0; i < 30; i++) {
-            const s = document.createElement('div');
-            s.className = 'lpo-star';
-            const color = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
-            s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${2+Math.random()*4}s;animation-delay:${Math.random()*4}s;width:${Math.random()<.3?6:4}px;height:${Math.random()<.3?6:4}px;background:${color};`;
-            overlay.appendChild(s);
-        }
-
-        // --- open overlay ---
-        function openOverlay() {
-            resetDigits();
-            overlay.classList.add('lpo-show');
-            overlay.classList.remove('lpo-exit');
-            setTimeout(() => digitEls[0] && digitEls[0].focus(), 400);
-        }
-
-        // --- close overlay ---
-        function closeOverlay() {
-            overlay.classList.remove('lpo-show');
-            resetDigits();
-        }
-
-        // --- reset state ---
-        function resetDigits() {
-            digitEls.forEach(d => { d.value = ''; d.classList.remove('filled','lpo-err'); });
-            errorEl.classList.remove('show');
-            unlockBtn.disabled = false;
-            successEl.classList.remove('show');
-        }
-
-        // --- digit wire-up ---
-        digitEls.forEach((el, i) => {
-            el.addEventListener('input', () => {
-                const v = el.value.replace(/\D/g, '');
-                el.value = v.slice(-1);
-                if (el.value) {
-                    el.classList.add('filled');
-                    if (i < 5) digitEls[i+1].focus();
-                    else checkCode();
-                } else {
-                    el.classList.remove('filled');
-                }
-            });
-            el.addEventListener('keydown', e => {
-                if (e.key === 'Backspace' && !el.value && i > 0) {
-                    digitEls[i-1].value = '';
-                    digitEls[i-1].classList.remove('filled');
-                    digitEls[i-1].focus();
-                }
-                if (e.key === 'Enter') checkCode();
-                if (e.key === 'Escape') closeOverlay();
-            });
-            el.addEventListener('paste', e => {
-                e.preventDefault();
-                const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
-                paste.split('').forEach((ch, idx) => {
-                    if (digitEls[idx]) { digitEls[idx].value = ch; digitEls[idx].classList.add('filled'); }
-                });
-                digitEls[Math.min(paste.length, 5)].focus();
-            });
-        });
-
-        // --- check ---
-        function checkCode() {
-            const entered = digitEls.map(d => d.value).join('');
-            if (entered.length < 6) return;
-            if (entered === CORRECT) {
-                unlockSuccess();
-            } else {
-                wrongCode();
-            }
-        }
-
-        function wrongCode() {
-            card.classList.add('lpo-shake');
-            digitEls.forEach(d => d.classList.add('lpo-err'));
-            errorEl.classList.add('show');
-            setTimeout(() => {
-                card.classList.remove('lpo-shake');
-                digitEls.forEach(d => { d.value=''; d.classList.remove('filled','lpo-err'); });
-                digitEls[0].focus();
-                setTimeout(() => errorEl.classList.remove('show'), 2000);
-            }, 600);
-        }
-
-        function unlockSuccess() {
-            unlockBtn.disabled = true;
-            successEl.classList.add('show');
-            overlay.classList.add('lpo-exit');
-            setTimeout(() => {
-                overlay.classList.remove('lpo-show','lpo-exit');
-                resetDigits();
-                // open the actual letter
-                personalNote.classList.add('show');
-                document.body.classList.add('letter-open');
-                document.body.style.overflow = 'hidden';
-                if (window.lenis) window.lenis.stop();
-                gsap.fromTo('.note-modal-content',
-                    { y: 50, opacity: 0 },
-                    { y: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.1 }
-                );
-            }, 2100);
+        function openNoteDirectly(e) {
+            if (e) e.preventDefault();
+            personalNote.classList.add('show');
+            document.body.classList.add('letter-open');
+            document.body.style.overflow = 'hidden';
+            if (window.lenis) window.lenis.stop();
+            gsap.fromTo('.note-modal-content',
+                { y: 50, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.1 }
+            );
         }
 
         // --- button listeners ---
-        if (noteBtn)    noteBtn.addEventListener('click', openOverlay);
-        if (unlockBtn)  unlockBtn.addEventListener('click', checkCode);
-        if (cancelBtn)  cancelBtn.addEventListener('click', closeOverlay);
+        if (noteBtn)    noteBtn.addEventListener('click', openNoteDirectly);
 
         // close letter
         if (closeNoteBtn && personalNote) {
