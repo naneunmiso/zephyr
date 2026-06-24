@@ -40,6 +40,15 @@ gsap.registerPlugin(ScrollTrigger);
 // Connect Lenis to ScrollTrigger
 lenis.on('scroll', ScrollTrigger.update);
 
+// Scroll progress bar
+const scrollProgBar = document.getElementById('scroll-prog');
+if (scrollProgBar) {
+    lenis.on('scroll', ({ progress }) => {
+        scrollProgBar.style.width = (progress * 100).toFixed(2) + '%';
+    });
+}
+
+
 // Hero Animations — premium staggered entrance
 const heroTl = gsap.timeline({ delay: 0.1 });
 
@@ -62,30 +71,30 @@ sections.forEach((section) => {
     const revealItems = section.querySelectorAll('.reveal-item');
     const h2 = section.querySelector('.section-header h2');
 
-    // Animate the decorative underline in
+    // Animate the decorative underline in with a slightly earlier trigger
     if (h2) {
         ScrollTrigger.create({
             trigger: section,
-            start: "top 80%",
+            start: "top 78%",
             onEnter: () => h2.classList.add('line-revealed'),
             onLeaveBack: () => h2.classList.remove('line-revealed')
         });
     }
 
     gsap.fromTo([...revealText, ...revealItems],
-        { y: 40, opacity: 0, visibility: 'hidden' },
+        { y: 50, opacity: 0, visibility: 'hidden' },
         {
             scrollTrigger: {
                 trigger: section,
-                start: "top 82%",
+                start: "top 80%",
                 toggleActions: "play none none reverse",
             },
             y: 0,
             opacity: 1,
             visibility: 'visible',
-            duration: 0.9,
-            stagger: 0.06,
-            ease: "power3.out",
+            duration: 1.1,
+            stagger: 0.08,
+            ease: "power4.out",
             overwrite: true,
             clearProps: "transform"
         }

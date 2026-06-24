@@ -1,15 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>22 Letters for 22 Years | Muskan's Birthday</title>
-  <link rel="stylesheet" href="../src/dashboard.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
-
+  <title>Birthday Letter | Muskan</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Dancing+Script:wght@500;700&family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
   <style>
-    /* ── PASSCODE OVERLAY ── */
+    :root {
+      --accent: #c87de8;
+      --bg: #07000f;
+      --text: #f0e8f8;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Cormorant Garamond', serif;
+      overflow-x: hidden;
+    }
+
+    /* ═══════════════════════════════════
+       PASSCODE OVERLAY — soft white/sky
+    ═══════════════════════════════════ */
     #passcode-overlay {
       position: fixed;
       inset: 0;
@@ -17,406 +48,1319 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(ellipse at 30% 40%, #1a0a2e 0%, #0d0015 50%, #000008 100%);
+      background: linear-gradient(145deg, #e8f4fb 0%, #f0f8ff 40%, #fdf6ff 70%, #e4f0f8 100%);
       overflow: hidden;
     }
 
-    /* floating orbs */
+    /* Fix: orb divs must be absolutely positioned so they don't disrupt flex centering */
     .orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      animation: orbFloat linear infinite;
+      position: absolute !important;
       pointer-events: none;
-    }
-    .orb1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(180,80,220,0.25), transparent 70%); top: -100px; left: -150px; animation-duration: 20s; }
-    .orb2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(80,120,255,0.2), transparent 70%); bottom: -80px; right: -100px; animation-duration: 25s; animation-direction: reverse; }
-    .orb3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,100,180,0.15), transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); animation-duration: 18s; }
-
-    @keyframes orbFloat {
-      0%   { transform: translate(0, 0) scale(1); }
-      33%  { transform: translate(40px, -30px) scale(1.05); }
-      66%  { transform: translate(-20px, 20px) scale(0.95); }
-      100% { transform: translate(0, 0) scale(1); }
+      border-radius: 50%;
+      filter: blur(70px);
+      animation: blobDrift ease-in-out infinite alternate;
     }
 
-    /* star particles */
-    .star {
-      position: absolute;
-      width: 2px; height: 2px;
-      background: #fff;
-      border-radius: 50%;
-      animation: twinkle ease-in-out infinite;
-      pointer-events: none;
+    .orb1 {
+      width: 460px;
+      height: 460px;
+      background: rgba(176, 224, 245, .5);
+      top: -100px;
+      left: -120px;
+      animation-duration: 9s;
     }
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.1; transform: scale(1); }
-      50%       { opacity: 0.9; transform: scale(1.6); }
+
+    .orb2 {
+      width: 380px;
+      height: 380px;
+      background: rgba(210, 225, 255, .45);
+      bottom: -80px;
+      right: -100px;
+      animation-duration: 12s;
+      animation-delay: 2s;
+    }
+
+    .orb3 {
+      width: 280px;
+      height: 280px;
+      background: rgba(245, 220, 255, .35);
+      top: 40%;
+      left: 60%;
+      animation-duration: 10s;
+      animation-delay: 1s;
+    }
+
+    /* soft floating blobs */
+    .pc-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      pointer-events: none;
+      animation: blobDrift ease-in-out infinite alternate;
+    }
+
+    .pc-blob1 {
+      width: 420px;
+      height: 420px;
+      background: rgba(176, 224, 245, .45);
+      top: -80px;
+      left: -100px;
+      animation-duration: 9s;
+    }
+
+    .pc-blob2 {
+      width: 340px;
+      height: 340px;
+      background: rgba(210, 230, 255, .4);
+      bottom: -60px;
+      right: -80px;
+      animation-duration: 12s;
+      animation-delay: 2s;
+    }
+
+    .pc-blob3 {
+      width: 260px;
+      height: 260px;
+      background: rgba(240, 220, 255, .3);
+      top: 45%;
+      left: 55%;
+      animation-duration: 10s;
+      animation-delay: 1s;
+    }
+
+    @keyframes blobDrift {
+      0% {
+        transform: translate(0, 0)scale(1);
+      }
+
+      100% {
+        transform: translate(24px, 16px)scale(1.06);
+      }
+    }
+
+    /* tiny dust particles */
+    .pc-dust {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: dustFloat ease-in-out infinite;
+    }
+
+    @keyframes dustFloat {
+
+      0%,
+      100% {
+        opacity: .25;
+        transform: translateY(0);
+      }
+
+      50% {
+        opacity: .7;
+        transform: translateY(-12px);
+      }
     }
 
     /* card */
     .pc-card {
       position: relative;
       z-index: 10;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.1);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      background: linear-gradient(160deg, rgba(255, 255, 255, .88) 0%, rgba(245, 250, 255, .78) 100%);
+      border: 1px solid rgba(180, 215, 245, .65);
+      border-top: 2px solid rgba(220, 240, 255, .95);
+      backdrop-filter: blur(40px) saturate(180%);
+      -webkit-backdrop-filter: blur(40px) saturate(180%);
       border-radius: 28px;
-      padding: 3rem 2.5rem 2.5rem;
+      padding: 3rem 2.8rem 2.6rem;
       max-width: 420px;
       width: 90%;
       text-align: center;
-      box-shadow: 0 0 80px rgba(160,60,220,0.2), 0 30px 60px rgba(0,0,0,0.5);
-      animation: cardEntrance 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, .8),
+        0 24px 70px rgba(100, 160, 220, .2),
+        0 8px 24px rgba(100, 160, 220, .1),
+        inset 0 1px 0 rgba(255, 255, 255, .95);
+      animation: cardIn .85s cubic-bezier(.34, 1.46, .64, 1) forwards;
     }
-    @keyframes cardEntrance {
-      from { opacity: 0; transform: translateY(40px) scale(0.9); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(36px)scale(.92);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)scale(1);
+      }
+    }
+
+    /* decorative top accent */
+    .pc-card::before {
+      content: '💌  ✨  💌';
+      position: absolute;
+      top: -1.1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.1rem;
+      letter-spacing: 8px;
+      white-space: nowrap;
     }
 
     .pc-icon {
       font-size: 2.8rem;
-      margin-bottom: 0.5rem;
-      animation: iconPulse 3s ease-in-out infinite;
+      margin-bottom: .6rem;
+      animation: iconFloat 4s ease-in-out infinite;
+      filter: drop-shadow(0 4px 16px rgba(100, 160, 220, .35));
     }
-    @keyframes iconPulse {
-      0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 8px rgba(255,150,200,0.4)); }
-      50%       { transform: scale(1.1) rotate(5deg); filter: drop-shadow(0 0 16px rgba(255,150,200,0.8)); }
+
+    @keyframes iconFloat {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-2deg);
+      }
+
+      50% {
+        transform: translateY(-8px) rotate(2deg);
+      }
     }
 
     .pc-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'EB Garamond', 'Cormorant Garamond', serif;
       font-size: 2rem;
-      font-weight: 300;
+      font-weight: 400;
       font-style: italic;
-      color: #f0e6e4;
-      margin: 0 0 0.4rem;
+      color: #1e3a5f;
+      margin: 0 0 .3rem;
       line-height: 1.2;
-    }
-    .pc-subtitle {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 300;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: rgba(240,200,220,0.5);
-      margin-bottom: 2.2rem;
+      background: linear-gradient(135deg, #2d4a6b 0%, #4a7fa8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    /* digit inputs */
+    .pc-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: .65rem;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      color: rgba(70, 110, 150, .5);
+      margin-bottom: 2rem;
+    }
+
     .pc-digits {
       display: flex;
       justify-content: center;
-      gap: 0.6rem;
       margin-bottom: 1.6rem;
+      width: 100%;
     }
-    .pc-digit {
-      width: 48px; height: 58px;
-      background: rgba(255,255,255,0.06);
-      border: 1.5px solid rgba(255,255,255,0.15);
-      border-radius: 12px;
-      color: #f0e6e4;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.6rem;
-      font-weight: 400;
+
+    .pc-text-input {
+      width: 100%;
+      height: 54px;
+      background: rgba(230, 244, 255, .65);
+      border: 1.5px solid rgba(150, 195, 230, .5);
+      border-radius: 14px;
+      color: #1a3550;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 6px;
       text-align: center;
       outline: none;
-      caret-color: #e08cd4;
-      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s, transform 0.2s;
+      caret-color: #4ba8d4;
+      transition: border-color .25s, box-shadow .3s, background .25s, transform .2s;
       -webkit-appearance: none;
       appearance: none;
-    }
-    .pc-digit:focus {
-      border-color: rgba(200,100,230,0.7);
-      background: rgba(200,100,230,0.1);
-      box-shadow: 0 0 0 3px rgba(200,100,230,0.2), 0 0 20px rgba(200,100,230,0.15);
-      transform: translateY(-2px) scale(1.05);
-    }
-    .pc-digit.filled {
-      border-color: rgba(230,150,255,0.5);
-      background: rgba(200,100,230,0.12);
+      padding: 0 18px;
+      box-shadow: 0 2px 8px rgba(100, 170, 220, .1);
     }
 
-    /* shake on wrong */
+    .pc-text-input:focus {
+      border-color: rgba(80, 165, 215, .8);
+      background: rgba(215, 238, 255, .9);
+      box-shadow: 0 0 0 4px rgba(80, 165, 215, .18), 0 4px 16px rgba(80, 165, 215, .15);
+      transform: translateY(-1px);
+    }
+
+    .pc-text-input::placeholder {
+      color: rgba(80, 130, 170, .3);
+      letter-spacing: 3px;
+      font-size: .84rem;
+    }
+
     .shake {
-      animation: shake 0.5s cubic-bezier(0.36,0.07,0.19,0.97) forwards;
+      animation: shake .5s forwards;
     }
+
     @keyframes shake {
-      10%, 90% { transform: translateX(-4px); }
-      20%, 80% { transform: translateX(6px); }
-      30%, 50%, 70% { transform: translateX(-6px); }
-      40%, 60% { transform: translateX(6px); }
+
+      10%,
+      90% {
+        transform: translateX(-4px);
+      }
+
+      20%,
+      80% {
+        transform: translateX(6px);
+      }
+
+      30%,
+      50%,
+      70% {
+        transform: translateX(-6px);
+      }
+
+      40%,
+      60% {
+        transform: translateX(6px);
+      }
     }
 
-    /* error text */
-    .pc-error {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 2px;
-      color: #ff7b9c;
-      text-transform: uppercase;
-      min-height: 1.2rem;
-      margin-bottom: 0.8rem;
+    .pc-err {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: .88rem;
+      font-style: italic;
+      color: #b05070;
+      min-height: 1.6rem;
+      margin-bottom: .6rem;
       opacity: 0;
-      transition: opacity 0.3s;
+      transition: opacity .3s;
+      line-height: 1.4;
     }
-    .pc-error.show { opacity: 1; }
 
-    /* unlock button */
+    .pc-err.on {
+      opacity: 1;
+    }
+
+    .pc-hint {
+      font-family: 'Inter', sans-serif;
+      font-size: .68rem;
+      letter-spacing: 1.5px;
+      color: rgba(90, 150, 190, .6);
+      margin-top: .3rem;
+      opacity: 0;
+      transition: opacity .4s .1s;
+      font-style: normal;
+      text-transform: uppercase;
+    }
+
+    .pc-hint.on {
+      opacity: 1;
+    }
+
     .pc-btn {
       width: 100%;
-      padding: 0.9rem;
+      padding: .9rem;
       border: none;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #a040c8, #5060e8);
+      border-radius: 50px;
+      background: linear-gradient(135deg, #6db8d8 0%, #a0c8e8 40%, #7faade 100%);
       color: #fff;
       font-family: 'Inter', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 400;
-      letter-spacing: 3px;
+      font-size: .72rem;
+      letter-spacing: 3.5px;
       text-transform: uppercase;
       cursor: pointer;
-      transition: opacity 0.25s, transform 0.2s, box-shadow 0.25s;
-      box-shadow: 0 8px 30px rgba(140,60,220,0.4);
+      box-shadow: 0 6px 24px rgba(90, 165, 215, .4), inset 0 1px 0 rgba(255, 255, 255, .5);
+      transition: transform .2s cubic-bezier(.34, 1.56, .64, 1), box-shadow .25s, filter .2s;
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
     }
-    .pc-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(140,60,220,0.55); }
-    .pc-btn:active { transform: translateY(0); }
-    .pc-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
 
-    /* success state */
-    .pc-success-msg {
+    .pc-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .25) 0%, rgba(255, 255, 255, 0) 60%);
+      border-radius: inherit;
+    }
+
+    .pc-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 36px rgba(90, 165, 215, .55);
+      filter: brightness(1.05);
+    }
+
+    .pc-btn:active {
+      transform: translateY(0);
+    }
+
+    .pc-btn:disabled {
+      opacity: .35;
+      cursor: default;
+      transform: none;
+    }
+
+    .pc-ok {
       position: absolute;
       inset: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      border-radius: 28px;
-      background: rgba(255,255,255,0.04);
+      border-radius: 24px;
+      background: rgba(235, 248, 255, .92);
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.5s ease;
+      transition: opacity .5s;
     }
-    .pc-success-msg.show { opacity: 1; pointer-events: all; }
-    .pc-success-icon { font-size: 3.5rem; animation: successPop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
-    @keyframes successPop {
-      from { transform: scale(0) rotate(-30deg); opacity: 0; }
-      to   { transform: scale(1) rotate(0deg); opacity: 1; }
+
+    .pc-ok.on {
+      opacity: 1;
+      pointer-events: all;
     }
-    .pc-success-text {
+
+    .pc-ok-icon {
+      font-size: 3.2rem;
+      animation: pop .6s cubic-bezier(.34, 1.56, .64, 1) forwards;
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(0)rotate(-20deg);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1)rotate(0);
+        opacity: 1;
+      }
+    }
+
+    .pc-ok-txt {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-style: italic;
-      color: #f0e6e4;
-      margin-top: 1rem;
-      animation: fadeUp 0.6s 0.3s both;
+      color: #2d4a6b;
+      margin-top: .9rem;
+      animation: fadeUp .6s .3s both;
     }
+
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    /* overlay exit */
-    #passcode-overlay.unlocking {
-      animation: overlayExit 0.9s 1.4s cubic-bezier(0.7,0,1,1) forwards;
-    }
-    @keyframes overlayExit {
-      0%   { opacity: 1; transform: scale(1); }
-      100% { opacity: 0; transform: scale(1.08); pointer-events: none; }
+    #passcode-overlay.exit {
+      animation: ovExit .9s 1.4s cubic-bezier(.7, 0, 1, 1) forwards;
     }
 
-    /* hide page content until unlocked */
-    #page-content { opacity: 0; transition: opacity 0.6s ease; }
-    #page-content.visible { opacity: 1; }
+    @keyframes ovExit {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(1.06);
+        pointer-events: none;
+      }
+    }
+
+    /* sparkles star layer */
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(120, 180, 220, .8);
+      animation: sparkleAnim ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes sparkleAnim {
+
+      0%,
+      100% {
+        opacity: 0;
+        transform: scale(0.4);
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: scale(1.2);
+      }
+    }
+
+    /* ═══════════════════════════════════
+       MAIN CONTENT — vertical scroll
+    ═══════════════════════════════════ */
+    #content {
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    #content.on {
+      opacity: 1;
+    }
+
+    /* scroll reveal for book sections — animated via GSAP ScrollTrigger */
+    .song-section .song-pdf-side {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+
+    .song-section .song-note-side {
+      opacity: 0;
+      transform: translateX(40px);
+    }
+
+    /* back button */
+    #back {
+      position: fixed;
+      top: 18px;
+      left: 20px;
+      z-index: 200;
+      font-family: 'Inter', sans-serif;
+      font-size: .7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(220, 190, 240, .6);
+      text-decoration: none;
+      padding: 8px 16px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 20px;
+      background: rgba(7, 0, 15, .6);
+      backdrop-filter: blur(12px);
+      transition: color .2s, background .2s, border-color .2s;
+    }
+
+    #back:hover {
+      color: #e8d4ff;
+      background: rgba(140, 40, 200, .25);
+      border-color: rgba(200, 120, 255, .4);
+    }
+
+    /* ═══════════════════════════════════
+       PAGE SECTION — each PDF page
+    ═══════════════════════════════════ */
+    .book-section {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 60px 16px 40px;
+      position: relative;
+      opacity: 0;
+      transform: translateY(40px);
+    }
+
+    /* canvas rendered from pdf.js */
+    .pdf-canvas-wrap {
+      width: 100%;
+      max-width: 860px;
+      position: relative;
+    }
+
+    .pdf-canvas-wrap canvas {
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      border-radius: 6px;
+      box-shadow: 0 20px 80px rgba(0, 0, 0, .6), 0 4px 20px rgba(0, 0, 0, .4);
+    }
+
+    /* loading skeleton */
+    .pdf-loading {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: linear-gradient(110deg, #1a0a2e 30%, #2d1050 50%, #1a0a2e 70%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 6px;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
+    /* ═══════════════════════════════════
+       WRITABLE PAGES (5-8)
+    ═══════════════════════════════════ */
+    .write-section {
+      width: 100%;
+      max-width: 860px;
+      position: relative;
+    }
+
+    .write-section canvas {
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+      border-radius: 6px;
+      box-shadow: 0 20px 80px rgba(0, 0, 0, .6);
+    }
+
+    .write-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      resize: none;
+      padding: 10% 14%;
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(15px, 2.5vw, 22px);
+      color: #2c1a0e;
+      line-height: 2.1;
+      z-index: 2;
+      caret-color: #5a2e10;
+      overflow: hidden;
+    }
+
+    .write-overlay::placeholder {
+      color: rgba(44, 26, 14, .3);
+    }
+
+    .write-page-num {
+      position: absolute;
+      bottom: 2%;
+      right: 4%;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(.6rem, 1.2vw, .8rem);
+      letter-spacing: 3px;
+      color: rgba(44, 26, 14, .35);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    /* ═══════════════════════════════════
+       PHOTO COLLAGE PAGE (9)
+    ═══════════════════════════════════ */
+    .collage-wrapper {
+      width: 100%;
+      max-width: 860px;
+    }
+
+    .collage-header {
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      border-radius: 6px 6px 0 0;
+      background: #f5e9d0;
+      position: relative;
+    }
+
+    .collage-header canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100% !important;
+      height: auto !important;
+    }
+
+    /* photo grid */
+    .collage-photos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(6px, 1.2vw, 14px);
+      padding: clamp(10px, 2vw, 20px);
+      background: #f7edd8;
+      border-radius: 0 0 6px 6px;
+      box-shadow: 0 20px 80px rgba(0, 0, 0, .5);
+      overflow: hidden;
+    }
+
+    .collage-photos img {
+      width: 100%;
+      min-width: 0;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 6px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .3);
+      transition: transform .3s ease, box-shadow .3s ease;
+      display: block;
+    }
+
+    .collage-photos img:hover {
+      transform: scale(1.04);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, .5);
+    }
+
+
+    /* ═══════════════════════════════════
+       FIXED PROGRESS BAR
+    ═══════════════════════════════════ */
+    #prog-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, #7040c8, #c87de8 50%, #5080e8);
+      z-index: 300;
+      transition: width .1s linear;
+      box-shadow: 0 0 12px rgba(140, 60, 220, .5);
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* ═══════════════════════════════════
+       PAGE 10 — SONG SPLIT LAYOUT
+    ═══════════════════════════════════ */
+    .song-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 60px 16px 60px;
+    }
+
+    .song-card {
+      width: 100%;
+      max-width: 920px;
+      background: #fffdf7;
+      border-radius: 8px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .55), 0 6px 24px rgba(0, 0, 0, .3);
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+      min-height: 540px;
+    }
+
+    .song-pdf-side {
+      width: 45%;
+      flex-shrink: 0;
+      border-right: 1px solid rgba(44, 26, 14, .12);
+      background: #faf6ee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px;
+      position: relative;
+    }
+
+    .song-pdf-side .pdf-canvas-wrap {
+      max-width: 100%;
+    }
+
+    .song-pdf-side .pdf-canvas-wrap canvas {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, .2) !important;
+    }
+
+    .song-note-side {
+      width: 55%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 44px;
+      background: #fffdf7;
+    }
+
+    .song-note-text {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      color: #2c1a0e;
+      line-height: 1.9;
+      letter-spacing: 0.01em;
+    }
+
+    .song-note-text p {
+      margin-bottom: 1.1em;
+    }
+
+    .song-note-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .song-note-text .note-opening {
+      font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+      font-weight: 700;
+      margin-bottom: 1.4em;
+      color: #1e0e04;
+    }
+
+    .song-note-text .note-signature {
+      margin-top: 1.6em;
+      font-size: clamp(1rem, 1.8vw, 1.25rem);
+      color: rgba(44, 26, 14, .65);
+      font-style: italic;
+    }
+
+    .song-note-text .note-birthday {
+      font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+      font-weight: 700;
+      color: #2c1a0e;
+    }
+
+    @media (max-width: 768px) {
+      .book-section {
+        min-height: auto;
+        padding: 30px 10px;
+      }
+
+      .song-section {
+        min-height: auto;
+        padding: 30px 8px;
+      }
+
+      .forever-section {
+        min-height: auto;
+        padding: 30px 10px 60px;
+      }
+
+      .song-card {
+        flex-direction: row;
+        min-height: unset;
+        align-items: stretch;
+      }
+
+      .song-pdf-side {
+        width: 44%;
+        border-right: 1px solid rgba(44, 26, 14, .08);
+        border-top: none;
+        padding: 16px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .song-pdf-side .pdf-canvas-wrap {
+        width: 100%;
+        max-width: 200px;
+        margin: 0 auto;
+      }
+
+      .song-pdf-side .pdf-canvas-wrap canvas {
+        width: 100% !important;
+        height: auto !important;
+        display: block;
+        margin: 0 auto;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+      }
+
+      .song-note-side {
+        width: 56%;
+        padding: 24px 16px 24px 12px;
+        display: flex;
+        align-items: center;
+      }
+
+      .song-note-text {
+        font-size: clamp(0.72rem, 2.8vw, 1.05rem);
+        line-height: 1.6;
+      }
+
+      .song-note-text p {
+        margin-bottom: 0.7em;
+      }
+
+      .song-note-text .note-opening {
+        font-size: clamp(0.9rem, 3.5vw, 1.25rem);
+        margin-bottom: 0.8em;
+      }
+
+      .song-note-text .note-birthday {
+        font-size: clamp(0.85rem, 3vw, 1.15rem);
+      }
+
+      .song-note-text .note-signature {
+        margin-top: 0.9em;
+        font-size: clamp(0.75rem, 2.8vw, 1.05rem);
+      }
+    }
+
+    /* ═══════════════════════════════════
+       PAGE 11 — FOREVER — clean
+    ═══════════════════════════════════ */
+    .forever-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 60px 16px 80px;
+    }
+
+    /* ═══════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════ */
+    @media (max-width: 600px) {
+      .book-section {
+        padding: 52px 10px 30px;
+      }
+
+      .write-overlay {
+        padding: 10% 10%;
+        font-size: clamp(11px, 2.5vw, 22px);
+      }
+
+      .pc-card {
+        padding: 2.2rem 1.4rem 1.8rem;
+      }
+
+      .pc-title {
+        font-size: 1.6rem;
+      }
+
+      .pc-sub {
+        margin-bottom: 1.4rem;
+      }
+    }
   </style>
 </head>
+
 <body>
 
-  <!-- ── PASSCODE OVERLAY ── -->
+  <!-- PASSCODE -->
   <div id="passcode-overlay">
-    <!-- orbs -->
     <div class="orb orb1"></div>
     <div class="orb orb2"></div>
     <div class="orb orb3"></div>
-
-    <!-- card -->
     <div class="pc-card" id="pc-card">
       <div class="pc-icon">💌</div>
-      <h2 class="pc-title">Secret Letters</h2>
-      <p class="pc-subtitle">Enter your passcode to unlock</p>
-
-      <div class="pc-digits" id="pc-digits">
-        <input class="pc-digit" type="tel" maxlength="1" id="d0" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
-        <input class="pc-digit" type="tel" maxlength="1" id="d1" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
-        <input class="pc-digit" type="tel" maxlength="1" id="d2" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
-        <input class="pc-digit" type="tel" maxlength="1" id="d3" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
-        <input class="pc-digit" type="tel" maxlength="1" id="d4" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
-        <input class="pc-digit" type="tel" maxlength="1" id="d5" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+      <h2 class="pc-title">Birthday Letter</h2>
+      <p class="pc-sub">Enter your passcode</p>
+      <div class="pc-digits">
+        <input class="pc-text-input" type="password" id="pc-text" autocomplete="off" placeholder="passcode"
+          spellcheck="false">
       </div>
-
-      <p class="pc-error" id="pc-error">Incorrect passcode — try again</p>
-
-      <button class="pc-btn" id="pc-btn" onclick="checkPasscode()">Unlock ✦</button>
-
-      <!-- success overlay inside card -->
-      <div class="pc-success-msg" id="pc-success">
-        <span class="pc-success-icon">🌸</span>
-        <p class="pc-success-text">Opening your letters…</p>
+      <p class="pc-err" id="pc-err">Incorrect passcode — try again</p>
+      <button class="pc-btn" id="pc-btn" onclick="checkCode()">Open ✦</button>
+      <div class="pc-ok" id="pc-ok">
+        <span class="pc-ok-icon">🌸</span>
+        <p class="pc-ok-txt">Opening your letter…</p>
       </div>
     </div>
   </div>
 
-  <!-- ── PAGE CONTENT ── -->
-  <div id="page-content">
-    <a href="../dashboard/index.html" class="back-btn">← Dashboard</a>
+  <!-- PROGRESS BAR -->
+  <div id="prog-bar"></div>
 
-    <div class="page-hero">
-      <p class="page-eyebrow">LETTERS TO HER SOUL</p>
-      <h1 class="page-title">22 <span>Letters</span></h1>
-      <div class="page-line"></div>
-    </div>
+  <!-- BACK -->
+  <a href="../index.html" id="back">← Back</a>
 
-    <div class="page-content">
-      <div class="letters-wrap">
-        <div class="swiper letters-swiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>You arrived in 2004 like a quiet revolution nobody saw coming.</p></div><div class="letter-number">✦ 01 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>At two, you already had opinions. Strong ones. Nothing has changed.</p></div><div class="letter-number">✦ 02 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>By three, the world learned your laughter is louder than your silence — both are magic.</p></div><div class="letter-number">✦ 03 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>At four you chased butterflies. Now butterflies chase you.</p></div><div class="letter-number">✦ 04 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>Five years old and already the most interesting person in any room.</p></div><div class="letter-number">✦ 05 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>They say six is when children become themselves. You were already you.</p></div><div class="letter-number">✦ 06 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>Seven: you discovered that stories are portals. You never really came back.</p></div><div class="letter-number">✦ 07 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>At eight, you learned that kindness is not weakness. It is the rarest kind of strength.</p></div><div class="letter-number">✦ 08 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>Nine candles and you already understood that some feelings live beyond words.</p></div><div class="letter-number">✦ 09 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>A decade of you. The world is richer for every single day.</p></div><div class="letter-number">✦ 10 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>Eleven: you started noticing the beauty in things everyone else overlooked.</p></div><div class="letter-number">✦ 11 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>Twelve felt like the last chapter of childhood. You made it legendary.</p></div><div class="letter-number">✦ 12 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>Thirteen: the world got complicated. You got more interesting.</p></div><div class="letter-number">✦ 13 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>At fourteen you discovered your voice. The universe leaned in to listen.</p></div><div class="letter-number">✦ 14 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>Fifteen brought turbulence. You danced through it anyway.</p></div><div class="letter-number">✦ 15 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>At sixteen you understood that some things are worth feeling deeply — and you felt everything.</p></div><div class="letter-number">✦ 16 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>Seventeen: nunchi — the art of reading a room. You mastered it without ever being taught.</p></div><div class="letter-number">✦ 17 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>Eighteen felt like freedom. You chose carefully which doors to open.</p></div><div class="letter-number">✦ 18 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>Nineteen: jeong — that quiet love that forms without asking permission. You give it freely.</p></div><div class="letter-number">✦ 19 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>At twenty, your ikigai revealed itself: to exist fully, love fiercely, live beautifully.</p></div><div class="letter-number">✦ 20 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>Twenty-one: ma — the Japanese art of meaningful pause. You know when to be still.</p></div><div class="letter-number">✦ 21 / 22</div></div>
-            <div class="swiper-slide letter-card"><div class="letter-content"><p>Twenty-two. This is not an ending. This is the most beautiful beginning of everything you are.</p></div><div class="letter-number">✦ 22 / 22</div></div>
-          </div>
-        </div>
-        <p style="color:rgba(240,230,228,0.3);font-size:0.8rem;letter-spacing:2px;margin-top:1rem;">SWIPE TO READ · 22 LETTERS</p>
-      </div>
-    </div>
+  <!-- MAIN CONTENT -->
+  <div id="content">
+    <!-- Pages rendered here by JS -->
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
   <script>
-    /* ── Star particles ── */
-    const overlay = document.getElementById('passcode-overlay');
-    for (let i = 0; i < 60; i++) {
-      const s = document.createElement('div');
-      s.className = 'star';
-      s.style.cssText = `
-        left:${Math.random()*100}%;
-        top:${Math.random()*100}%;
-        animation-duration:${2+Math.random()*4}s;
-        animation-delay:${Math.random()*4}s;
-        width:${Math.random()<0.3?3:2}px;
-        height:${Math.random()<0.3?3:2}px;
-        opacity:${0.1+Math.random()*0.4};
-      `;
-      overlay.appendChild(s);
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    /* ──────────────────────────────────
+       LENIS SMOOTH SCROLLING
+    ────────────────────────────────── */
+    let lenis = null;
+    if (typeof Lenis !== 'undefined') {
+      lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1.15
+      });
+
+      function raf(time) {
+        if (lenis) lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+
+      // Start with lenis stopped because of passcode screen
+      lenis.stop();
     }
 
-    /* ── Digit inputs ── */
-    const digits = Array.from(document.querySelectorAll('.pc-digit'));
-    const CORRECT = '250604';
+    /* ──────────────────────────────────
+       PASSCODE
+    ────────────────────────────────── */
+    const ov = document.getElementById('passcode-overlay');
+    for (let i = 0; i < 70; i++) {
+      const s = document.createElement('div'); s.className = 'star';
+      s.style.cssText = `left:${Math.random() * 100}%;top:${Math.random() * 100}%;animation-duration:${2 + Math.random() * 4}s;animation-delay:${Math.random() * 5}s;width:${Math.random() < .3 ? 3 : 2}px;height:${Math.random() < .3 ? 3 : 2}px;opacity:${.1 + Math.random() * .4};`;
+      ov.appendChild(s);
+    }
+    const pcInput = document.getElementById('pc-text');
+    const CODE = 'kushu';
+    if (pcInput) {
+      pcInput.addEventListener('keydown', e => { if (e.key === 'Enter') checkCode(); });
+      setTimeout(() => pcInput.focus(), 600);
+    }
 
-    digits.forEach((el, i) => {
-      el.addEventListener('input', () => {
-        const v = el.value.replace(/\D/g,'');
-        el.value = v.slice(-1);
-        if (el.value) {
-          el.classList.add('filled');
-          if (i < 5) digits[i+1].focus();
-          else checkPasscode();
-        } else {
-          el.classList.remove('filled');
-        }
-      });
-
-      el.addEventListener('keydown', e => {
-        if (e.key === 'Backspace' && !el.value && i > 0) {
-          digits[i-1].value = '';
-          digits[i-1].classList.remove('filled');
-          digits[i-1].focus();
-        }
-        if (e.key === 'Enter') checkPasscode();
-      });
-
-      el.addEventListener('paste', e => {
-        e.preventDefault();
-        const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
-        paste.split('').forEach((ch, idx) => {
-          if (digits[idx]) { digits[idx].value = ch; digits[idx].classList.add('filled'); }
-        });
-        const next = Math.min(paste.length, 5);
-        digits[next].focus();
-      });
-    });
-
-    /* Auto-focus first digit */
-    setTimeout(() => digits[0].focus(), 600);
-
-    /* ── Check passcode ── */
-    function checkPasscode() {
-      const entered = digits.map(d => d.value).join('');
-      if (entered.length < 6) return;
-
-      if (entered === CORRECT) {
-        unlock();
+    function checkCode() {
+      const v = (pcInput ? pcInput.value.trim() : '');
+      if (!v) return;
+      if (v === CODE) {
+        document.getElementById('pc-btn').disabled = true;
+        document.getElementById('pc-ok').classList.add('on');
+        ov.classList.add('exit');
+        setTimeout(() => { ov.style.display = 'none'; startBook(); }, 2400);
       } else {
-        wrong();
+        const c = document.getElementById('pc-card'), e = document.getElementById('pc-err');
+        c.classList.add('shake'); e.classList.add('on');
+        if (pcInput) { pcInput.style.borderColor = 'rgba(255,80,100,.7)'; pcInput.style.background = 'rgba(255,80,100,.1)'; }
+        setTimeout(() => {
+          c.classList.remove('shake');
+          if (pcInput) { pcInput.value = ''; pcInput.style.borderColor = ''; pcInput.style.background = ''; pcInput.focus(); }
+          setTimeout(() => e.classList.remove('on'), 2000);
+        }, 600);
       }
     }
-    window.checkPasscode = checkPasscode;
+    window.checkCode = checkCode;
 
-    function wrong() {
-      const card = document.getElementById('pc-card');
-      const err  = document.getElementById('pc-error');
-      card.classList.add('shake');
-      err.classList.add('show');
-      digits.forEach(d => {
-        d.style.borderColor = 'rgba(255,80,100,0.7)';
-        d.style.background  = 'rgba(255,80,100,0.1)';
+    /* ──────────────────────────────────
+       PDF RENDERING
+    ────────────────────────────────── */
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+    async function renderPDF(url, container, opts = {}) {
+      const skel = document.createElement('div');
+      skel.className = 'pdf-loading';
+      container.appendChild(skel);
+
+      try {
+        const pdf = await pdfjsLib.getDocument(url).promise;
+        const pageNums = opts.pages || [1];
+
+        for (const pNum of pageNums) {
+          const page = await pdf.getPage(pNum);
+          const viewport = page.getViewport({ scale: 1 });
+          const containerW = (container.parentElement
+            ? container.parentElement.clientWidth || window.innerWidth
+            : window.innerWidth);
+          const maxW = Math.min(containerW - 32, opts.maxWidth || 860);
+
+          let scale;
+          if (opts.maxHeight) {
+            const scaleH = (opts.maxHeight * DPR) / viewport.height;
+            const scaleW = (maxW * DPR) / viewport.width;
+            scale = Math.min(scaleH, scaleW);
+          } else {
+            scale = (maxW * DPR) / viewport.width;
+          }
+
+          const vp = page.getViewport({ scale });
+          const canvas = document.createElement('canvas');
+          canvas.width = vp.width;
+          canvas.height = vp.height;
+          canvas.style.width = (vp.width / DPR) + 'px';
+          canvas.style.height = (vp.height / DPR) + 'px';
+
+          await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+          container.appendChild(canvas);
+        }
+        skel.remove();
+      } catch (err) {
+        skel.remove();
+        const errDiv = document.createElement('div');
+        errDiv.style.cssText = 'color:rgba(200,100,100,.7);padding:40px;text-align:center;font-size:.9rem;';
+        errDiv.textContent = 'Could not load page';
+        container.appendChild(errDiv);
+        console.warn('PDF render error:', url, err);
+      }
+    }
+
+    /* ──────────────────────────────────
+       BOOK BUILDER
+    ────────────────────────────────── */
+    const PAGES = [
+      { type: 'pdf', src: '../letter/Front page (1).pdf', label: 'Front Page' },
+      { type: 'pdf', src: '../letter/pages.pdf', label: 'Page 2' },
+      { type: 'pdf', src: '../letter/third page camelia (1).pdf', label: 'Page 3' },
+      { type: 'pdf', src: '../letter/second page (1).pdf', label: 'Page 4' },
+      { type: 'write', src: '../letter/letter pages (1).pdf', page: 1, key: 'lp5', label: 'Page 5', ph: '' },
+      { type: 'write', src: '../letter/letter pages (1).pdf', page: 1, key: 'lp6', label: 'Page 6', ph: '' },
+      { type: 'write', src: '../letter/letter pages (1).pdf', page: 1, key: 'lp7', label: 'Page 7', ph: '' },
+      { type: 'write', src: '../letter/letter pages (1).pdf', page: 1, key: 'lp8', label: 'Page 8', ph: "i don't know what to write just happy birthday >3" },
+      {
+        type: 'collage', src: '../letter/Beige Doodle Fun Fashion Magazine Cover (1).pdf', label: 'Page 9',
+        photos: [
+          '../letter/WhatsApp Image 2026-06-24 at 12.33.54.jpeg',
+          '../letter/WhatsApp Image 2026-06-24 at 12.33.54 (1).jpeg',
+          '../letter/WhatsApp Image 2026-06-24 at 12.33.59.jpeg',
+        ]
+      },
+      { type: 'song', src: '../letter/song.pdf', label: 'Page 10' },
+      { type: 'forever', src: '../letter/Forever (1).pdf', label: 'Page 11' },
+    ];
+
+    async function startBook() {
+      const content = document.getElementById('content');
+      content.classList.add('on');
+
+      for (let i = 0; i < PAGES.length; i++) {
+        const p = PAGES[i];
+
+        /* ── Standard PDF page ── */
+        if (p.type === 'pdf') {
+          const section = document.createElement('div');
+          section.className = 'book-section';
+          section.id = 'pg' + (i + 1);
+          const wrap = document.createElement('div');
+          wrap.className = 'pdf-canvas-wrap';
+          section.appendChild(wrap);
+          content.appendChild(section);
+          observeRender(wrap, () => renderPDF(p.src, wrap));
+        }
+
+        /* ── Writable letter pages ── */
+        else if (p.type === 'write') {
+          const section = document.createElement('div');
+          section.className = 'book-section';
+          section.id = 'pg' + (i + 1);
+
+          const wrap = document.createElement('div');
+          wrap.className = 'write-section pdf-canvas-wrap';
+          wrap.style.position = 'relative';
+
+          const ta = document.createElement('textarea');
+          ta.className = 'write-overlay';
+          ta.placeholder = p.ph;
+          ta.dataset.k = p.key;
+          let saved = localStorage.getItem(p.key);
+          if (!saved || saved.trim() === "" || saved.includes("i don't know what to write just happy birthday >3")) {
+            if (p.key === 'lp8') {
+              saved = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ni don't know what to write just happy birthday >3";
+              localStorage.setItem(p.key, saved);
+            } else {
+              saved = "";
+              localStorage.setItem(p.key, saved);
+            }
+          }
+          ta.value = saved;
+          ta.addEventListener('input', () => localStorage.setItem(p.key, ta.value));
+
+          const lbl = document.createElement('span');
+          lbl.className = 'write-page-num';
+          lbl.textContent = '✦ ' + (i - 3) + ' / 4';
+
+          section.appendChild(wrap);
+          content.appendChild(section);
+          observeRender(wrap, async () => {
+            await renderPDF(p.src, wrap, { pages: [p.page] });
+            wrap.appendChild(ta);
+            wrap.appendChild(lbl);
+            const cv = wrap.querySelector('canvas');
+            if (cv) {
+              ta.style.height = cv.style.height || cv.offsetHeight + 'px';
+              new ResizeObserver(() => { ta.style.height = cv.offsetHeight + 'px'; }).observe(cv);
+            }
+          });
+        }
+
+        /* ── Photo collage page 9 ── */
+        else if (p.type === 'collage') {
+          const section = document.createElement('div');
+          section.className = 'book-section';
+          section.id = 'pg' + (i + 1);
+
+          const wrap = document.createElement('div');
+          wrap.className = 'collage-wrapper pdf-canvas-wrap';
+
+          const header = document.createElement('div');
+          header.className = 'collage-header';
+
+          const grid = document.createElement('div');
+          grid.className = 'collage-photos';
+          p.photos.forEach(src => {
+            const img = document.createElement('img');
+            img.src = src; img.alt = 'memory'; img.loading = 'lazy';
+            grid.appendChild(img);
+          });
+
+          wrap.appendChild(header);
+          wrap.appendChild(grid);
+          section.appendChild(wrap);
+          content.appendChild(section);
+
+          observeRender(header, async () => {
+            await renderPDF(p.src, header, { maxHeight: 200 });
+          });
+        }
+
+        /* ── Song page 10 — split layout ── */
+        else if (p.type === 'song') {
+          const section = document.createElement('div');
+          section.className = 'song-section book-section';
+          section.id = 'pg' + (i + 1);
+
+          const card = document.createElement('div');
+          card.className = 'song-card';
+
+          // Left: PDF
+          const pdfSide = document.createElement('div');
+          pdfSide.className = 'song-pdf-side';
+          const pdfWrap = document.createElement('div');
+          pdfWrap.className = 'pdf-canvas-wrap';
+          pdfSide.appendChild(pdfWrap);
+
+          // Right: handwritten note
+          const noteSide = document.createElement('div');
+          noteSide.className = 'song-note-side';
+          const noteText = document.createElement('div');
+          noteText.className = 'song-note-text';
+          noteText.innerHTML = `
+          <p class="note-opening">For you, always.</p>
+          <p>Some songs find you at the right moment —<br>when the words are too much,<br>and silence isn't enough.</p>
+          <p>This one felt like you.</p>
+          <p>So I saved it here,<br>between the last page and forever,<br>as a reminder that you are<br>someone worth writing songs about.</p>
+          <p class="note-birthday">Happy Birthday, Muskan.</p>
+          <p class="note-signature">— with love, always ♡</p>
+        `;
+          noteSide.appendChild(noteText);
+
+          card.appendChild(pdfSide);
+          card.appendChild(noteSide);
+          section.appendChild(card);
+          content.appendChild(section);
+
+          observeRender(pdfWrap, () => renderPDF(p.src, pdfWrap, { maxWidth: 380 }));
+        }
+
+        /* ── Forever page 11 — clean render ── */
+        else if (p.type === 'forever') {
+          const section = document.createElement('div');
+          section.className = 'forever-section book-section';
+          section.id = 'pg' + (i + 1);
+
+          const wrap = document.createElement('div');
+          wrap.className = 'pdf-canvas-wrap';
+          section.appendChild(wrap);
+          content.appendChild(section);
+          observeRender(wrap, () => renderPDF(p.src, wrap));
+        }
+      } // end for loop
+
+      // Start Lenis when the book is unlocked and connect it to ScrollTrigger
+      if (lenis) {
+        lenis.start();
+        lenis.on('scroll', ScrollTrigger.update);
+        lenis.on('scroll', ({ progress }) => {
+          document.getElementById('prog-bar').style.width = (progress * 100).toFixed(2) + '%';
+        });
+      } else {
+        // Fallback scroll listener for progress bar
+        window.addEventListener('scroll', () => {
+          const h = document.documentElement;
+          const pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+          document.getElementById('prog-bar').style.width = pct + '%';
+        }, { passive: true });
+      }
+
+      // Scroll reveal animations via GSAP ScrollTrigger
+      setTimeout(() => {
+        document.querySelectorAll('.book-section').forEach(section => {
+          // Create a single timeline for the section to avoid multiple ScrollTriggers and prevent scroll lag
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: section,
+              start: "top 88%",
+              toggleActions: "play none none none"
+            }
+          });
+
+          // Section entrance
+          tl.fromTo(section,
+            { opacity: 0, y: 40 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1.1,
+              ease: "power3.out"
+            }
+          );
+
+          // Child components fade reveals inside the timeline
+          const canvas = section.querySelector('canvas');
+          const overlay = section.querySelector('.write-overlay');
+          const label = section.querySelector('.write-page-num');
+          const collagePhotos = section.querySelectorAll('.collage-photos img');
+          const songPdf = section.querySelector('.song-pdf-side');
+          const songNote = section.querySelector('.song-note-side');
+
+          if (canvas) {
+            tl.fromTo(canvas,
+              { scale: 0.96, opacity: 0 },
+              { scale: 1, opacity: 1, duration: 0.95, ease: "power2.out" },
+              "-=0.9"
+            );
+          }
+
+          if (overlay) {
+            tl.fromTo(overlay,
+              { opacity: 0 },
+              { opacity: 1, duration: 0.9 },
+              "-=0.6"
+            );
+          }
+
+          if (label) {
+            tl.fromTo(label,
+              { opacity: 0, y: 10 },
+              { opacity: 1, y: 0, duration: 0.8 },
+              "-=0.6"
+            );
+          }
+
+          if (collagePhotos.length > 0) {
+            tl.fromTo(collagePhotos,
+              { opacity: 0, scale: 0.8, y: 30 },
+              {
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                duration: 0.85,
+                stagger: 0.08,
+                ease: "power2.out"
+              },
+              "-=0.8"
+            );
+          }
+
+          if (songPdf && songNote) {
+            tl.fromTo(songPdf,
+              { opacity: 0, x: -30 },
+              { opacity: 1, x: 0, duration: 1.1, ease: "power3.out" },
+              "-=0.8"
+            );
+            tl.fromTo(songNote,
+              { opacity: 0, x: 30 },
+              { opacity: 1, x: 0, duration: 1.1, ease: "power3.out" },
+              "-=1.1"
+            );
+          }
+        });
+      }, 200);
+
+    } // end startBook
+
+    // IntersectionObserver for lazy PDF rendering
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting && e.target._renderFn) {
+          e.target._renderFn();
+          io.unobserve(e.target);
+          delete e.target._renderFn;
+        }
       });
-      setTimeout(() => {
-        card.classList.remove('shake');
-        digits.forEach(d => { d.value=''; d.classList.remove('filled'); d.style.borderColor=''; d.style.background=''; });
-        digits[0].focus();
-        setTimeout(() => err.classList.remove('show'), 2000);
-      }, 600);
-    }
+    }, { rootMargin: '300px' });
 
-    function unlock() {
-      document.getElementById('pc-btn').disabled = true;
-      const success = document.getElementById('pc-success');
-      success.classList.add('show');
-      overlay.classList.add('unlocking');
-      setTimeout(() => {
-        overlay.style.display = 'none';
-        document.getElementById('page-content').classList.add('visible');
-      }, 2400);
+    function observeRender(el, fn) {
+      el._renderFn = fn;
+      io.observe(el);
     }
   </script>
-
-  <script type="module">
-    import { initSakura, initLetters, initPageTransitions } from '../src/dashboard.js';
-    initSakura();
-    initLetters();
-    initPageTransitions();
-  </script>
+  <!-- GSAP ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>gsap.registerPlugin(ScrollTrigger);</script>
 </body>
+
 </html>

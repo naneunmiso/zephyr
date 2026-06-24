@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
     <script>document.documentElement.className += " js-enabled";</script>
     <style>
         @keyframes fadeInSafe { to { opacity: 1; visibility: visible; transform: none; } }
@@ -23,9 +23,24 @@
             opacity: 1 !important;
             visibility: visible !important;
         }
+        /* Scroll progress bar */
+        #scroll-prog {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, #e88b9b, #c9a96e, #a77bca);
+            z-index: 9999;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px rgba(232,139,155,.6);
+            border-radius: 0 2px 2px 0;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
+    <!-- Scroll progress bar -->
+    <div id="scroll-prog"></div>
     <div class="grain-overlay"></div>
     
     <!-- Mobile Drawer -->
@@ -223,10 +238,10 @@
 
                 <!-- Toggle button for the note -->
                 <div class="note-toggle-wrapper reveal-item">
-                    <button id="open-note-btn" class="cute-btn letter-box-btn">
+                    <a href="pages/letters.html" class="cute-btn letter-box-btn" id="open-note-btn" style="display:inline-flex;text-decoration:none;">
                         <img src="letterlogo.jpg" alt="Letter Logo" class="btn-logo">
                         <div class="btn-bubble"></div>
-                    </button>
+                    </a>
                 </div>
 
                 <!-- The personal love note (popup modal) -->
