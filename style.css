@@ -1709,7 +1709,7 @@ section {
 }
 
 .note-modal-content {
-    background-image: url('letter.jpg') !important;
+    background-image: url('/letter.jpg') !important;
     background-size: cover !important;
     background-position: center !important;
     border: none !important;
